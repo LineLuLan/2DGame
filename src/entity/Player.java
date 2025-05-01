@@ -1,0 +1,295 @@
+package entity;
+
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import main.GamePanel;
+import main.KeyHandler;
+
+public class Player extends Entity {
+    KeyHandler keyH;
+
+    public final int screenX;
+    public final int screenY;
+    public int standCounter = 0;
+    boolean moving = false;
+    int pixelCounter = 0;
+    
+
+    public Player(GamePanel gp, KeyHandler keyH) {
+        super(gp);
+        this.keyH = keyH;
+
+        screenX = gp.screenWidth/2 - (gp.tileSize/2);
+        screenY = gp.screenHeight/2 - (gp.tileSize/2);
+
+        solidArea = new Rectangle(); 
+        solidArea.x = 1;
+        solidArea.y = 1;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        solidArea.width = 46;
+        solidArea.height = 46;
+
+        attackArea.width = 36;
+        attackArea.height = 36;    
+
+        setDefaultValues();
+        getPlayerImage();
+        getPlayerAttackImage();
+    }
+
+    public void setDefaultValues() {
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
+        speed = 4;
+        direction = "down";
+
+        // PLAYER STATUS
+        maxLife = 6;
+        life = maxLife;
+    }
+
+    public void getPlayerImage() {
+
+        up1 = setUp("player/Line_up1", gp.tileSize, gp.tileSize);
+        up2 = setUp("player/Line_up2", gp.tileSize, gp.tileSize);
+        down1 = setUp("player/Line_down1", gp.tileSize, gp.tileSize);
+        down2 = setUp("player/Line_down2", gp.tileSize, gp.tileSize);
+        right1 = setUp("player/Line_right1", gp.tileSize, gp.tileSize);
+        right2 = setUp("player/Line_right2", gp.tileSize, gp.tileSize);
+        left1 = setUp("player/Line_left1", gp.tileSize, gp.tileSize);
+        left2 = setUp("player/Line_left2", gp.tileSize, gp.tileSize);  
+
+    }
+
+    public void getPlayerAttackImage() {
+        attackUp1 = setUp("player/Line_attack_up1", gp.tileSize, gp.tileSize*2);
+        attackUp2 = setUp("player/Line_attack_up2", gp.tileSize, gp.tileSize*2);
+        attackDown1 = setUp("player/Line_attack_down1", gp.tileSize, gp.tileSize*2);
+        attackDown2 = setUp("player/Line_attack_down2", gp.tileSize, gp.tileSize*2);
+        attackLeft1 = setUp("player/Line_attack_left1", gp.tileSize*2, gp.tileSize);
+        attackLeft2 = setUp("player/Line_attack_left2" , gp.tileSize*2, gp.tileSize);
+        attackRight1 = setUp("player/Line_attack_right1", gp.tileSize*2, gp.tileSize);
+        attackRight2 = setUp("player/Line_attack_right2", gp.tileSize*2, gp.tileSize);
+    }
+
+
+    @Override
+    public void update() {
+    
+        if (attacking) {
+            attacking();
+        } else {
+            if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.enteredPressed) {
+                if (keyH.upPressed) direction = "up";
+                if (keyH.downPressed) direction = "down";
+                if (keyH.leftPressed) direction = "left";
+                if (keyH.rightPressed) direction = "right";
+        
+                // COLLISION CHECK
+                collisionOn = false;
+                gp.cChecker.checkTile(this);
+
+                int objIndex = gp.cChecker.checkObject(this, true);
+                pickUpObject(objIndex);
+
+                int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+                interactNPC(npcIndex);
+
+                int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+                contactMonster(monsterIndex);
+
+                gp.eHandler.checkEvent();
+        
+                // MOVE IF NO COLLISION
+                if (!collisionOn) {
+                    switch(direction) {
+                        case "up" -> worldY -= speed;
+                        case "down" -> worldY += speed;
+                        case "left" -> worldX -= speed;
+                        case "right" -> worldX += speed;
+                    }
+                }
+        
+                // ANIMATION
+                spriteCounter++;
+                if (spriteCounter > 10) {
+                    spriteNum = (spriteNum == 1) ? 2 : 1;
+                    spriteCounter = 0;
+                }
+            } else {
+                standCounter++;
+                if (standCounter > 20) {
+                    spriteNum = 1;
+                    standCounter = 0;
+                }
+            }
+        
+            // INVINCIBLE TIMER
+            if (invincible) {
+                invincibleCounter++;
+                if (invincibleCounter > 60) {
+                    invincible = false;
+                    invincibleCounter = 0;
+                }
+            }
+        }
+    
+
+    }
+    
+
+    
+    public void attacking() {
+        moving = false;
+        spriteCounter++;
+        
+        if (spriteCounter <= 5) {
+            spriteNum = 1;
+        }
+
+        if (spriteCounter > 5 && spriteCounter <= 25) {
+            spriteNum = 2;
+            
+            // Save the current worldX, worldY, solidArea
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+
+            //Adjust player's worldX/Y for the attackArea
+            switch(direction) {
+                case "up" -> worldY -= attackArea.height;
+                case "down" -> worldY += attackArea.height;
+                case "left" -> worldX -= attackArea.width;
+                case "right" -> worldX += attackArea.width;
+            }
+
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+            damageMonster(monsterIndex);
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
+        }
+
+        if (spriteCounter > 25) {
+            spriteNum = 1;
+            spriteCounter = 0;
+            attacking = false;
+        }
+    }
+
+    public void pickUpObject(int i) {
+        if (i != 999) {
+            
+        }
+    }
+
+    public void interactNPC(int i) {
+        if (gp.keyH.enteredPressed == true) {
+            if (i != 999) {
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
+            } else {
+                gp.playSE(7);
+                attacking = true;
+            } 
+            gp.keyH.enteredPressed = false;
+        }
+    }
+
+    public void contactMonster(int i) {
+        if (i != 999) {
+            if (invincible == false) {
+                gp.playSE(6);
+                life -= 1;
+                invincible = true;
+            }         
+        }
+    }
+
+    public void damageMonster(int i) {
+        if (i != 999) {
+            if (gp.monster[i].invincible == false) {
+
+                gp.playSE(5);
+                gp.monster[i].life -= 1;
+                gp.monster[i].invincible = true;
+                gp.monster[i].damageReaction();
+
+                if (gp.monster[i].life <= 0) {
+                    gp.monster[i].dying = true;
+                }
+            } 
+        }
+    }
+
+    public void draw(Graphics2D g2) {
+        BufferedImage image = null;
+        int tempScreenX = screenX;
+        int tempScreenY = screenY;
+        
+        switch(direction) {
+            case "up" -> {
+                if (attacking == false) {
+                    if (spriteNum == 1) { image = up1; }
+                    if (spriteNum == 2) { image = up2; }
+                }
+                if (attacking == true) {
+                    tempScreenY = screenY - gp.tileSize;
+                    if (spriteNum == 1) { image = attackUp1; }
+                    if (spriteNum == 2) { image = attackUp2; }
+                }
+            }
+            case "down" -> {
+                if (attacking == false) {
+                    if (spriteNum == 1) { image = down1; }
+                    if (spriteNum == 2) { image = down2; }
+                }
+                if (attacking == true) {
+                    if (spriteNum == 1) { image = attackDown1; }
+                    if (spriteNum == 2) { image = attackDown2; }
+                }
+            }
+            case "left" -> {
+                if (attacking == false) {
+                    if (spriteNum == 1) { image = left1; }
+                    if (spriteNum == 2) { image = left2; }
+                }
+                if (attacking == true) {
+                    tempScreenX =  screenX - gp.tileSize;
+                    if (spriteNum == 1) { image = attackLeft1; }
+                    if (spriteNum == 2) { image = attackLeft2; }
+                }
+            }
+            case "right" -> {
+                if (attacking == false) {
+                    if (spriteNum == 1) { image = right1; }
+                    if (spriteNum == 2) { image = right2; }
+                }
+                if (attacking == true) {
+                    if (spriteNum == 1) { image = attackRight1; }
+                    if (spriteNum == 2) { image = attackRight2; }
+                }
+            }
+        }
+        
+        if (invincible == true) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
+
+
+        g2.drawImage(image, tempScreenX, tempScreenY, null);
+
+        // RESET ALPHA
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+
+}
