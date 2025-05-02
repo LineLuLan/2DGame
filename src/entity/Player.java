@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import main.GamePanel;
 import main.KeyHandler;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 
 public class Player extends Entity {
     KeyHandler keyH;
@@ -13,9 +15,10 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     public int standCounter = 0;
-    boolean moving = false;
-    int pixelCounter = 0;
-    
+    public boolean moving = false;
+    public int pixelCounter = 0;
+    public boolean attackCanceled = false;
+
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -49,6 +52,22 @@ public class Player extends Entity {
         // PLAYER STATUS
         maxLife = 6;
         life = maxLife;
+        strength = 1; //The more strength she has, the more damage he gives
+        dexterity = 1; //The more dexterity she has, the less damage she receives
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack(); // The total attack value is decided by strength and weapon
+        defense = getDefense(); //The total defense value is decided by dexterity and shield
+    }
+
+    public int getAttack(){
+        return attack = strength * currentWeapon.attackValue;
+    }
+    public int getDefense(){
+        return defense = strength * currentShield.defenseValue;
     }
 
     public void getPlayerImage() {
@@ -112,6 +131,15 @@ public class Player extends Entity {
                         case "right" -> worldX += speed;
                     }
                 }
+
+                if (keyH.enteredPressed == true && attackCanceled == false){
+                    gp.playSE(7);
+                    attacking = true;
+                    spriteCounter = 0;
+                }
+
+                attackCanceled = false;
+                gp.keyH.enteredPressed = false;
         
                 // ANIMATION
                 spriteCounter++;
@@ -194,13 +222,11 @@ public class Player extends Entity {
     public void interactNPC(int i) {
         if (gp.keyH.enteredPressed == true) {
             if (i != 999) {
+                attackCanceled = true;
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
-            } else {
-                gp.playSE(7);
-                attacking = true;
-            } 
-            gp.keyH.enteredPressed = false;
+            }
+//            gp.keyH.enteredPressed = false;
         }
     }
 
