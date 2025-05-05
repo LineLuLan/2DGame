@@ -9,6 +9,6 @@ public class OBJ_Shield_Wood extends Entity {
 
         name = "Wood Shield";
         down1 = setUp("objects/sword_normal", gp.tileSize, gp.tileSize);
-        defenseValue  =1;
+        defenseValue  = 1;
     }
 }
