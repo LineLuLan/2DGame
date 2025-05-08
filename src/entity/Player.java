@@ -50,6 +50,7 @@ public class Player extends Entity {
         direction = "down";
 
         // PLAYER STATUS
+        level = 1;
         maxLife = 6;
         life = maxLife;
         strength = 1; //The more strength she has, the more damage he gives
@@ -234,7 +235,11 @@ public class Player extends Entity {
         if (i != 999) {
             if (invincible == false) {
                 gp.playSE(6);
-                life -= 1;
+                int damage = gp.monster[i].attack - defense;
+                if (damage < 0){
+                    damage = 0; 
+                }
+                life -= damage;
                 invincible = true;
             }         
         }
@@ -245,17 +250,41 @@ public class Player extends Entity {
             if (gp.monster[i].invincible == false) {
 
                 gp.playSE(5);
-                gp.monster[i].life -= 1;
+                
+                int damage = attack -gp.monster[i].defense;
+                if (damage < 0){
+                    damage = 0; 
+                }
+                gp.monster[i].life -= damage;
                 gp.monster[i].invincible = true;
                 gp.monster[i].damageReaction();
+                gp.ui.addMessage(damage + " damage!");
 
                 if (gp.monster[i].life <= 0) {
                     gp.monster[i].dying = true;
+                    gp.ui.addMessage("Kill the " + gp.monster[i].name + "!");
+                    gp.ui.addMessage("+ " + gp.monster[i].exp + " exp !");
+                    exp += gp.monster[i].exp;
+                    checkLeverUp();
                 }
             } 
         }
     }
-
+    public void checkLeverUp(){
+        if (exp >= nextLevelExp ){
+            level ++;
+            nextLevelExp = nextLevelExp *2;
+            maxLife += 2;
+            strength ++;
+            dexterity ++;
+            attack = getAttack();
+            defense = getDefense();
+            gp.playSE(8);
+            gp.gameState = gp.dialogueState;
+            gp.ui.currentDialogue = "You are level " + level + " now!\n"
+                + "You feel stronger!";
+        }
+    }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         int tempScreenX = screenX;
