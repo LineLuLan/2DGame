@@ -21,7 +21,7 @@ public class Player extends Entity {
     public int pixelCounter = 0;
     public boolean attackCanceled = false;
     public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int inventorySize = 20;
+    public final int maxInventorySize = 20;
 
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -39,8 +39,8 @@ public class Player extends Entity {
         solidArea.width = 46;
         solidArea.height = 46;
 
-        attackArea.width = 36;
-        attackArea.height = 36;    
+        //attackArea.width = 36;
+        //attackArea.height = 36;    
 
         setDefaultValues();
         getPlayerImage();
@@ -75,6 +75,7 @@ public class Player extends Entity {
         inventory.add(new OBJ_Key(gp));
     }
     public int getAttack(){
+        attackArea = currentWeapon.attackArea;
         return attack = strength * currentWeapon.attackValue;
     }
     public int getDefense(){
@@ -95,14 +96,27 @@ public class Player extends Entity {
     }
 
     public void getPlayerAttackImage() {
-        attackUp1 = setUp("player/Line_attack_up1", gp.tileSize, gp.tileSize*2);
-        attackUp2 = setUp("player/Line_attack_up2", gp.tileSize, gp.tileSize*2);
-        attackDown1 = setUp("player/Line_attack_down1", gp.tileSize, gp.tileSize*2);
-        attackDown2 = setUp("player/Line_attack_down2", gp.tileSize, gp.tileSize*2);
-        attackLeft1 = setUp("player/Line_attack_left1", gp.tileSize*2, gp.tileSize);
-        attackLeft2 = setUp("player/Line_attack_left2" , gp.tileSize*2, gp.tileSize);
-        attackRight1 = setUp("player/Line_attack_right1", gp.tileSize*2, gp.tileSize);
-        attackRight2 = setUp("player/Line_attack_right2", gp.tileSize*2, gp.tileSize);
+
+        if (currentWeapon.type == type_sword ){
+            attackUp1 = setUp("player/Line_attack_up1", gp.tileSize, gp.tileSize*2);
+            attackUp2 = setUp("player/Line_attack_up2", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setUp("player/Line_attack_down1", gp.tileSize, gp.tileSize*2);
+            attackDown2 = setUp("player/Line_attack_down2", gp.tileSize, gp.tileSize*2);
+            attackLeft1 = setUp("player/Line_attack_left1", gp.tileSize*2, gp.tileSize);
+            attackLeft2 = setUp("player/Line_attack_left2" , gp.tileSize*2, gp.tileSize);
+            attackRight1 = setUp("player/Line_attack_right1", gp.tileSize*2, gp.tileSize);
+            attackRight2 = setUp("player/Line_attack_right2", gp.tileSize*2, gp.tileSize);
+        }
+        if (currentWeapon.type == type_axe){
+            attackUp1 = setUp("player/Line_axe_up1", gp.tileSize, gp.tileSize*2);
+            attackUp2 = setUp("player/Line_axe_up2", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setUp("player/Line_axe_down1", gp.tileSize, gp.tileSize*2);
+            attackDown2 = setUp("player/Line_axe_down2", gp.tileSize, gp.tileSize*2);
+            attackLeft1 = setUp("player/Line_axe_left1", gp.tileSize*2, gp.tileSize);
+            attackLeft2 = setUp("player/Line_axe_left2" , gp.tileSize*2, gp.tileSize);
+            attackRight1 = setUp("player/Line_axe_right1", gp.tileSize*2, gp.tileSize);
+            attackRight2 = setUp("player/Line_axe_right2", gp.tileSize*2, gp.tileSize);
+        }
     }
 
 
@@ -226,7 +240,17 @@ public class Player extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            
+            String text ;
+            if (inventory.size() != maxInventorySize ){
+                inventory.add(gp.obj[i]);
+                gp.playSE(1);
+                text = "Got a " + gp.obj[i].name + "!";
+            }
+            else {
+                text = "You can not carry anymore";
+            }
+            gp.ui.addMessage(text);
+            gp.obj[i] = null;
         }
     }
 
@@ -295,6 +319,28 @@ public class Player extends Entity {
                 + "You feel stronger!";
         }
     }
+
+    public void selectItem(){
+        int itemIndex = gp.ui.getItemIndexOnSlot();
+        if(itemIndex < inventory.size()){
+            Entity selectedItem = inventory.get(itemIndex);
+
+            if (selectedItem.type == type_sword || selectedItem.type == type_axe ){
+                currentWeapon = selectedItem; 
+                attack = getAttack();
+                getPlayerAttackImage();
+            }   
+            if (selectedItem.type == type_shield){
+                currentShield = selectedItem;
+                defense = getDefense();
+            }
+            if (selectedItem.type == type_consumable){
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
+            }
+        }
+    }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         int tempScreenX = screenX;
