@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
+import object.OBJ_Fireball;
 
 public class Entity {
     
@@ -26,7 +27,7 @@ public class Entity {
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public boolean collisionOn = false;
     public boolean invincible = false;
-    public int type; // 0 = player, 1 = npc, 2 = monster
+    
     public boolean attacking = false;
     public boolean alive = true;
     public boolean dying = false;
@@ -48,10 +49,13 @@ public class Entity {
     public int spriteNum = 1;
     public int dyingCounter = 0;
     public int hpBarCounter = 0;
+    public int shotAvailableCounter = 0;
     
-    // CHARATER STATUS
+    // CHARATER ATTRIBUTE
     public int maxLife;
     public int life;
+    public int maxMana;
+    public int mana;
     public int level;
     public int strength;
     public int dexterity;
@@ -62,15 +66,32 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Projectile projectile;
 
     //ITEMS ATTRIBUTE
     public int attackValue;
     public int defenseValue;
-    
+    public String description = "";
+    public int useCost;
+
+    //type 
+    public int type; // 0 = player, 1 = npc, 2 = monster
+    public final int type_player = 0;
+    public final int type_monster = 2;
+    public final int type_npc = 1;
+    public final int type_sword = 3;
+    public final int type_axe = 4;
+    public final int type_shield = 5;
+    public final int type_consumable = 6;
+
+ 
     public Entity (GamePanel gp) {
         this.gp = gp;
     }
     
+    public void use(Entity entity){
+        
+    }
     public void update() {
         setAction();
         
@@ -82,7 +103,7 @@ public class Entity {
   
         // CHECK PLAYER COLLISION - FOR MONSTER ONLY
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
-        if (this.type == 2 && contactPlayer == true) {
+        if (this.type == type_monster && contactPlayer == true) {
             if (gp.player.invincible == false ) {
 
                 gp.playSE(6);
@@ -205,7 +226,7 @@ public class Entity {
         if (dyingCounter > i*7  && dyingCounter <= i*8) { changeAlpha(g2, 1f);}
 
         if (dyingCounter > i*8) {
-            dying = false;
+            // dying = false;
             alive = false;
         }
     }
