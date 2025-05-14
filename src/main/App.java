@@ -19,6 +19,5 @@ public class App {
         
         gamePanel.setUpGame();
         gamePanel.startGameThread();
-
     }
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
+import object.OBJ_Fireball;
 
 public class Entity {
     
@@ -48,10 +49,13 @@ public class Entity {
     public int spriteNum = 1;
     public int dyingCounter = 0;
     public int hpBarCounter = 0;
+    public int shotAvailableCounter = 0;
     
-    // CHARATER STATUS
+    // CHARATER ATTRIBUTE
     public int maxLife;
     public int life;
+    public int maxMana;
+    public int mana;
     public int level;
     public int strength;
     public int dexterity;
@@ -62,11 +66,13 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Projectile projectile;
 
     //ITEMS ATTRIBUTE
     public int attackValue;
     public int defenseValue;
     public String description = "";
+    public int useCost;
 
     //type 
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -220,7 +226,7 @@ public class Entity {
         if (dyingCounter > i*7  && dyingCounter <= i*8) { changeAlpha(g2, 1f);}
 
         if (dyingCounter > i*8) {
-            dying = false;
+            // dying = false;
             alive = false;
         }
     }

@@ -38,11 +38,11 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity obj[] = new Entity[10];
     public Entity npc[] =  new Entity[10];
     public Entity monster[] = new Entity[20];
+    public ArrayList <Entity> projectileList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
 
     public EventHandler eHandler = new EventHandler(this);
     Thread gameThread;
-
 
     //GAME STATE
     public int gameState;
@@ -139,6 +139,19 @@ public class GamePanel extends JPanel implements Runnable {
                     // monster[i].update();
                 }
             }
+
+            //PROJECTILE
+            for (int i = 0; i < projectileList.size(); i++) {
+                if(projectileList.get(i) != null) {
+                    if (projectileList.get(i).alive == true ) {
+                        projectileList.get(i).update();
+                    }
+                    if (projectileList.get(i).alive == false) {
+                        projectileList.remove(i);
+                    }
+                  
+                }
+            }
         }
 
         // if (gameState == pauseState){
@@ -198,6 +211,11 @@ public class GamePanel extends JPanel implements Runnable {
                     entityList.add(monster[i]);
                 }
             }
+            for (int i = 0; i < projectileList.size(); i++){
+                if (projectileList.get(i) != null) {
+                    entityList.add(projectileList.get(i));
+                }
+            }
             
             // SORT
             Collections.sort(entityList, new Comparator<Entity>() {
@@ -211,7 +229,6 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < entityList.size(); i++){
                 entityList.get(i).draw(g2);
             }
-
 
             // UI
             ui.draw(g2);
@@ -234,8 +251,6 @@ public class GamePanel extends JPanel implements Runnable {
              g2.drawString("WorldY"+player.worldY,x,y); y += lineHeight;
              g2.drawString("Col"+(player.worldX -player.solidAreaDefaultX)/tileSize,x,y);y+=lineHeight;
              g2.drawString("Row"+(player.worldY -player.solidAreaDefaultY)/tileSize,x,y);y+=lineHeight;
-
-
 
              g2.drawString("Draw Time"+passed,x,y);
 
