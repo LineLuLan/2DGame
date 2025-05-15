@@ -20,6 +20,9 @@ public class Sound {
             soundURL[5] = new File("res/sound/hitmonster.wav").toURI().toURL();
             soundURL[6] = new File("res/sound/receivedamage.wav").toURI().toURL();
             soundURL[7] = new File("res/sound/swingweapon.wav").toURI().toURL();
+            soundURL[8] = new File("res/sound/levelup.wav").toURI().toURL();
+            soundURL[9] = new File("res/sound/cursor.wav").toURI().toURL();
+            soundURL[10] = new File("res/sound/burning.wav").toURI().toURL();
 
     
         } catch (Exception e) {
