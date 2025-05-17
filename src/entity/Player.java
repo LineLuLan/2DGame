@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import main.GamePanel;
 import main.KeyHandler;
-import object.OBJ_Fireball;
 import object.OBJ_Key;
+import object.OBJ_Rock;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
@@ -69,7 +69,8 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
-        projectile = new OBJ_Fireball(gp);
+        // projectile = new OBJ_Fireball(gp);
+        projectile = new OBJ_Rock(gp);
         attack = getAttack(); // The total attack value is decided by strength and weapon
         defense = getDefense(); //The total defense value is decided by dexterity and shield
     }
@@ -217,6 +218,12 @@ public class Player extends Entity {
         if (shotAvailableCounter < 40){
             shotAvailableCounter ++;
         }
+        if (life > maxLife) {
+            life = maxLife;
+        }
+        if (mana > maxMana) {
+            mana = maxMana;
+        }  
 
     }
     
@@ -265,17 +272,27 @@ public class Player extends Entity {
 
     public void pickUpObject(int i) {
         if (i != 999) {
-            String text ;
-            if (inventory.size() != maxInventorySize ){
-                inventory.add(gp.obj[i]);
-                gp.playSE(1);
-                text = "Got a " + gp.obj[i].name + "!";
+            //PICKUP ONLY ITEMS
+            if(gp.obj[i].type == type_pickupOnly){
+                gp.obj[i].use(this);
+                gp.obj[i] = null;   
             }
+
+            //INVENTORY ITEMS
             else {
-                text = "You can not carry anymore";
-            }
-            gp.ui.addMessage(text);
-            gp.obj[i] = null;
+                String text ;
+                if (inventory.size() != maxInventorySize ){
+                    inventory.add(gp.obj[i]);
+                    gp.playSE(1);
+                    text = "Got a " + gp.obj[i].name + "!";
+                }
+                else {
+                    text = "You can not carry anymore";
+                }
+                gp.ui.addMessage(text);
+                gp.obj[i] = null;
+                }
+            
         }
     }
 

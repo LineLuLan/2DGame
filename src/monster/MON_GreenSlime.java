@@ -3,6 +3,9 @@ package monster;
 import entity.Entity;
 import java.util.Random;
 import main.GamePanel;
+import object.OBJ_Coin_Bronze;
+import object.OBJ_Heart;
+import object.OBJ_ManaCrystal;
 import object.OBJ_Rock;
 
 public class MON_GreenSlime extends Entity{
@@ -64,7 +67,7 @@ public class MON_GreenSlime extends Entity{
             if (i > 50 && i <= 75) {
                 direction = "left";
             }
-            if (i > 75) {
+            if (i > 75 && i <= 100) {
                 direction = "right";
             }
 
@@ -72,8 +75,9 @@ public class MON_GreenSlime extends Entity{
 
         }
 
-         int i = new Random().nextInt(100) + 1;
-         if (i > 99 && projectile.alive == false && shotAvailableCounter == 30){
+        int i = new Random().nextInt(100) + 1;
+        if (i > 99 && projectile.alive == false && shotAvailableCounter == 30){
+            
             projectile.set(worldX, worldY, direction, true, this);
             gp.projectileList.add(projectile);
             shotAvailableCounter = 0;
@@ -85,6 +89,21 @@ public class MON_GreenSlime extends Entity{
         actionLockCounter = 0;
         direction = gp.player.direction;
         
+    }
+
+    public void checkDrop() {
+        int i = new Random().nextInt(100) + 1;
+
+        // SET THE DROP RATE
+        if (i < 50) {
+            dropItem(new OBJ_Coin_Bronze(gp));
+        }
+        if (i >= 50 && i < 75) {
+            dropItem(new OBJ_Heart(gp));
+        }
+        if (i >= 75 && i < 100) {
+            dropItem(new OBJ_ManaCrystal(gp));
+        }
     }
 
 }
