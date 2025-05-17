@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import main.GamePanel;
 import main.KeyHandler;
+import object.OBJ_Fireball;
 import object.OBJ_Key;
 import object.OBJ_Rock;
 import object.OBJ_Shield_Wood;
@@ -69,8 +70,8 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
-        // projectile = new OBJ_Fireball(gp);
-        projectile = new OBJ_Rock(gp);
+        projectile = new OBJ_Fireball(gp);
+        // projectile = new OBJ_Rock(gp);
         attack = getAttack(); // The total attack value is decided by strength and weapon
         defense = getDefense(); //The total defense value is decided by dexterity and shield
     }
@@ -127,8 +128,6 @@ public class Player extends Entity {
 
     @Override
     public void update() {
-
-        
     
         if (attacking) {
             attacking();
@@ -151,6 +150,9 @@ public class Player extends Entity {
 
                 int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
                 contactMonster(monsterIndex);
+
+                // CHECK INTERACTIVE TILE
+                int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
 
                 gp.eHandler.checkEvent();
         
@@ -257,6 +259,10 @@ public class Player extends Entity {
 
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             damageMonster(monsterIndex, attack);
+
+            int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+            damageInteractiveTile(iTileIndex);
+
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
@@ -346,6 +352,25 @@ public class Player extends Entity {
             } 
         }
     }
+
+    public void damageInteractiveTile(int i) {
+        if (i != 999 && gp.iTile[i].destructible == true 
+            && gp.iTile[i].isCorrectItem(this) == true
+            && gp.iTile[i].invincible == false) {
+
+                gp.iTile[i].playSE();
+                gp.iTile[i].life--;
+                gp.iTile[i].invincible = true;
+
+                if (gp.iTile[i].life <= 0) {
+                    gp.iTile[i] = gp.iTile[i].getDestroyedForm();
+                    
+                }
+                
+
+        } 
+    }
+
     public void checkLeverUp(){
         if (exp >= nextLevelExp ){
             level ++;

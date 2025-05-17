@@ -6,6 +6,7 @@ import object.OBJ_Axe;
 import object.OBJ_Key;
 import object.OBJ_Potion_Red;
 import object.OBJ_Shield_Blue;
+import tile_interactive.IT_DryTree;
 
 public class AssetSetter {
     GamePanel gp;
@@ -71,6 +72,18 @@ public class AssetSetter {
         gp.monster[i] = new MON_GreenSlime(gp);
         gp.monster[i].worldX = gp.tileSize * 38;
         gp.monster[i].worldY = gp.tileSize * 42;
+        i++;
+    }
+
+    public void setInteractiveTile(){
+        int i = 0;
+        gp.iTile[i] = new IT_DryTree(gp, 27, 11);
+        i++;
+        gp.iTile[i] = new IT_DryTree(gp, 28, 11);
+        i++;
+        gp.iTile[i] = new IT_DryTree(gp, 29, 11);
+        i++;
+        gp.iTile[i] = new IT_DryTree(gp, 30, 11);
         i++;
     }
 }
