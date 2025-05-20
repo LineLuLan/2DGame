@@ -33,6 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     
+    Config config = new Config(this);
+
     public UI ui = new UI(this);
 
     //PLAYER AND OBJECT
@@ -56,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int dialogueState = 3;
     public final int characterState = 4;
     public final int optionsState = 5;
+    public final int gameOVerState = 6;
 
     //SOUND
     Sound music = new Sound();
@@ -95,7 +98,27 @@ public class GamePanel extends JPanel implements Runnable {
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
         
-        // setFullScreen(); // Full screen mode
+        if (fullScreenOn == true){
+            setFullScreen();
+        }
+    }
+
+    public void retry() {
+        player.setDefaultPositions();
+        player.restoreLifeAndMana();
+        aSetter.setNPC();
+        aSetter.setMonster();
+    }
+
+    public void restart() {
+        player.setDefaultValues();
+        player.setDefaultPositions();
+        player.restoreLifeAndMana();
+        player.setItems();
+        aSetter.setObject();
+        aSetter.setNPC();
+        aSetter.setMonster();
+        aSetter.setInteractiveTile();
     }
 
     public void setFullScreen() {
