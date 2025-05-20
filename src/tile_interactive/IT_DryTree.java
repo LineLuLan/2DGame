@@ -1,6 +1,7 @@
 package tile_interactive;
 
 import entity.Entity;
+import java.awt.Color;
 import main.GamePanel;
 
 public class IT_DryTree extends InteractiveTile {
@@ -36,4 +37,31 @@ public class IT_DryTree extends InteractiveTile {
         InteractiveTile tile = new IT_Trunk(gp, worldX/gp.tileSize, worldY/gp.tileSize);
         return tile;
     }
+
+    @Override
+    public Color getParticleColor() {
+        Color color = new Color(139, 69, 19); // Brown color for wood
+        return color;
+    }
+
+    
+    @Override
+    public int getParticleSize() {
+        int size = 6; // 6 pixels
+        return size;
+    }
+
+    @Override
+    public int getParticleSpeed() {
+        int speed = 1; // 1 pixel per frame
+        return speed;
+    }
+
+    @Override
+    public int getParticleMaxLife() {
+        int maxLife = 20; // 20 frames
+        return maxLife;
+    }
+
+
 }

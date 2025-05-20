@@ -9,7 +9,6 @@ import main.GamePanel;
 import main.KeyHandler;
 import object.OBJ_Fireball;
 import object.OBJ_Key;
-import object.OBJ_Rock;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
@@ -34,12 +33,12 @@ public class Player extends Entity {
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         solidArea = new Rectangle(); 
-        solidArea.x = 1;
-        solidArea.y = 1;
+        solidArea.x = 8;
+        solidArea.y = 20;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 46;
-        solidArea.height = 46;
+        solidArea.width = 18;
+        solidArea.height = 18;
 
         //attackArea.width = 36;
         //attackArea.height = 36;    
@@ -361,6 +360,9 @@ public class Player extends Entity {
                 gp.iTile[i].playSE();
                 gp.iTile[i].life--;
                 gp.iTile[i].invincible = true;
+
+                // Generate particles
+                generateParticle(gp.iTile[i], gp.iTile[i]);
 
                 if (gp.iTile[i].life <= 0) {
                     gp.iTile[i] = gp.iTile[i].getDestroyedForm();

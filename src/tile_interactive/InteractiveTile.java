@@ -1,6 +1,7 @@
 package tile_interactive;
 
 import entity.Entity;
+import java.awt.Graphics2D;
 import main.GamePanel;
 
 public class InteractiveTile extends Entity{
@@ -33,6 +34,20 @@ public class InteractiveTile extends Entity{
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+    }
+
+    public void draw(Graphics2D g2){
+        int screenX = worldX - gp.player.worldX + gp.player.screenX;
+        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        
+
+        if (worldX > gp.player.worldX - gp.player.screenX - gp.tileSize
+            && worldX < gp.player.screenX + gp.player.worldX + gp.tileSize
+            && worldY > gp.player.worldY - gp.player.screenY - gp.tileSize
+            && worldY < gp.player.worldY + gp.player.worldY + gp.tileSize) {
+                
+            g2.drawImage(down1, screenX, screenY, null);
         }
     }
 
