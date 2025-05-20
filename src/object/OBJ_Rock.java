@@ -33,15 +33,25 @@ public class OBJ_Rock extends Projectile {
         right2 = setUp("projectile/rock_down_1", gp.tileSize, gp.tileSize);
     }
 
+    @Override
     public boolean haveResource(Entity user) {
         boolean haveResource = false;
+
+        if (user.type == type_monster) { 
+            return true; 
+        }
         if (user.ammo >= useCost) {
             haveResource = true;
         }
         return haveResource;
     }
 
+    @Override
     public void subtractResource(Entity user){
+        if (user.type == type_monster){
+            return;
+        }
+
         user.ammo -= useCost;
     }
 

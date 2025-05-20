@@ -76,8 +76,8 @@ public class MON_GreenSlime extends Entity{
         }
 
         int i = new Random().nextInt(100) + 1;
-        int requiredShotCooldown = 30; 
-        if (i < 99 && projectile.alive == false && shotAvailableCounter == 30
+        int requiredShotCooldown = 45; 
+        if (i > 1 && projectile.alive == false
         && shotAvailableCounter >= requiredShotCooldown) {
             
             projectile.set(worldX, worldY, direction, true, this);

@@ -55,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int characterState = 4;
+    public final int optionsState = 5;
 
     //SOUND
     Sound music = new Sound();
@@ -70,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     Graphics2D g2;
+
+    public boolean fullScreenOn = false;
     
 
     public GamePanel () {
@@ -174,33 +177,21 @@ public class GamePanel extends JPanel implements Runnable {
             //PROJECTILE
             for (int i = 0; i < projectileList.size(); i++) {
                 if(projectileList.get(i) != null) {
-                    if (projectileList.get(i).alive == true ) {
-                        projectileList.get(i).update();
+                    Entity p = projectileList.get(i); // Gán vào biến để dễ đọc và hiệu quả hơn
+                    if (p.alive == true ) {
+                        p.update(); // Trong Projectile.update(), alive có thể bị set thành false
                     }
-                    if (projectileList.get(i).alive == false) {
+                    // Sau khi update, kiểm tra lại trạng thái alive của projectile
+                    // vì p.update() có thể đã thay đổi p.alive
+                    if (p.alive == false) {
                         projectileList.remove(i);
+                        i--; // QUAN TRỌNG: Giảm i để không bỏ sót phần tử tiếp theo
                     }
-                  
+                } else { // Nếu vì lý do nào đó có phần tử null trong list
+                    projectileList.remove(i);
+                    i--; // Cũng cần giảm i
                 }
             }
-
-            // for (int i = 0; i < projectileList.size(); i++) {
-            //     if(projectileList.get(i) != null) {
-            //         Entity p = projectileList.get(i); // Gán vào biến để dễ đọc và hiệu quả hơn
-            //         if (p.alive == true ) {
-            //             p.update(); // Trong Projectile.update(), alive có thể bị set thành false
-            //         }
-            //         // Sau khi update, kiểm tra lại trạng thái alive của projectile
-            //         // vì p.update() có thể đã thay đổi p.alive
-            //         if (p.alive == false) {
-            //             projectileList.remove(i);
-            //             i--; // QUAN TRỌNG: Giảm i để không bỏ sót phần tử tiếp theo
-            //         }
-            //     } else { // Nếu vì lý do nào đó có phần tử null trong list
-            //         projectileList.remove(i);
-            //         i--; // Cũng cần giảm i
-            //     }
-            // }
 
 
             // PARTICLE
