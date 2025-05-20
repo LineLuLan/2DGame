@@ -164,6 +164,8 @@ public class UI {
     }
 
     public void drawTitleScreen() {
+        g2.setColor(new Color(0, 0, 0));
+        g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
 
         if (titleScreenState == 0) {
             //BACKGROUND
@@ -385,12 +387,12 @@ public class UI {
 
     public void drawInventory(){
         // Frame
-        int frameX = gp.tileSize * 9; 
+        int frameX = gp.tileSize * 12; 
         int frameY = gp.tileSize;
         int frameWidth = gp.tileSize * 6;
         int frameHeight = gp.tileSize * 5;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-        // Slot
+        // Slot 
         final int slotXstart = frameX + 20;
         final int slotYStart = frameY + 20;
         int slotX = slotXstart; 
