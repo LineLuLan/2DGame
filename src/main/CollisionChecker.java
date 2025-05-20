@@ -1,6 +1,7 @@
 package main;
 
 import entity.Entity;
+import java.awt.Rectangle;
 
 public class CollisionChecker {
     GamePanel gp;
@@ -134,36 +135,73 @@ public class CollisionChecker {
         return index;
     }
 
-    public boolean checkPlayer(Entity entity) {
+    // public boolean checkPlayer(Entity entity) {
         
+    //     boolean contactPlayer = false;
+
+    //     // Get entity's solid area position
+    //     entity.solidArea.x = entity.worldX + entity.solidArea.x;
+    //     entity.solidArea.y = entity.worldY + entity.solidArea.y;
+
+    //     //Get the object's solid area position
+    //     gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+    //     gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+
+    //     switch(entity.direction) {
+    //         case "up" -> entity.solidArea.y -= entity.speed;
+    //         case "down" -> entity.solidArea.y += entity.speed;
+    //         case "left" -> entity.solidArea.x -= entity.speed;
+    //         case "right" -> entity.solidArea.x += entity.speed;
+    //         }
+    //     if (entity.solidArea.intersects(gp.player.solidArea)) {
+    //         entity.collisionOn = true;
+    //         contactPlayer = true;
+    //     }
+        
+    //     entity.solidArea.x = entity.solidAreaDefaultX;
+    //     entity.solidArea.y = entity.solidAreaDefaultY;
+    //     gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+    //     gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+        
+    //     return contactPlayer;
+        
+    // }
+
+    public boolean checkPlayer(Entity entity) {
         boolean contactPlayer = false;
 
-        // Get entity's solid area position
-        entity.solidArea.x = entity.worldX + entity.solidArea.x;
-        entity.solidArea.y = entity.worldY + entity.solidArea.y;
+        // Tạo một bản sao của solidArea của entity để kiểm tra, không làm thay đổi solidArea gốc
+        Rectangle entityCheckArea = new Rectangle();
+        entityCheckArea.x = entity.worldX + entity.solidArea.x; // Sử dụng offset gốc
+        entityCheckArea.y = entity.worldY + entity.solidArea.y; // Sử dụng offset gốc
+        entityCheckArea.width = entity.solidArea.width;
+        entityCheckArea.height = entity.solidArea.height;
 
-        //Get the object's solid area position
-        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
-        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+        // Tạo một bản sao của solidArea của player để kiểm tra
+        Rectangle playerCheckArea = new Rectangle();
+        playerCheckArea.x = gp.player.worldX + gp.player.solidArea.x; // Sử dụng offset gốc
+        playerCheckArea.y = gp.player.worldY + gp.player.solidArea.y; // Sử dụng offset gốc
+        playerCheckArea.width = gp.player.solidArea.width;
+        playerCheckArea.height = gp.player.solidArea.height;
 
-        switch(entity.direction) {
-            case "up" -> entity.solidArea.y -= entity.speed;
-            case "down" -> entity.solidArea.y += entity.speed;
-            case "left" -> entity.solidArea.x -= entity.speed;
-            case "right" -> entity.solidArea.x += entity.speed;
-            }
-        if (entity.solidArea.intersects(gp.player.solidArea)) {
+
+        // Dự đoán vị trí tiếp theo của entityCheckArea
+        switch (entity.direction) {
+            case "up"    -> entityCheckArea.y -= entity.speed;
+            case "down"  -> entityCheckArea.y += entity.speed;
+            case "left"  -> entityCheckArea.x -= entity.speed;
+            case "right" -> entityCheckArea.x += entity.speed;
+        }
+
+        if (entityCheckArea.intersects(playerCheckArea)) {
+            // CHỈ đặt collisionOn cho entity đang được kiểm tra, KHÔNG phải cho player
             entity.collisionOn = true;
             contactPlayer = true;
         }
-        
-        entity.solidArea.x = entity.solidAreaDefaultX;
-        entity.solidArea.y = entity.solidAreaDefaultY;
-        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
-        
+        // Không cần reset solidArea.x/y của entity hay player về solidAreaDefaultX/Y
+        // vì chúng ta không thay đổi các giá trị offset gốc của chúng.
+
         return contactPlayer;
-        
     }
 }
 

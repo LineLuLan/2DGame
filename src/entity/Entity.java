@@ -22,7 +22,7 @@ public class Entity {
     public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public String direction = "down";
-    public Rectangle solidArea= new Rectangle(0, 0, 48, 48);
+    public Rectangle solidArea= new Rectangle(0, 0, 45, 45);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public boolean collisionOn = false;
     public boolean invincible = false;
@@ -105,6 +105,44 @@ public class Entity {
         }
     }
 
+        public Color getParticleColor() {
+        Color color = null; 
+        return color;
+    }
+
+    public int getParticleSize() {
+        int size = 0; // pixels
+        return size;
+    }
+
+    public int getParticleSpeed() {
+        int speed = 0; // pixel per frame
+        return speed;
+    }
+
+    public int getParticleMaxLife() {
+        int maxLife = 0; // frames
+        return maxLife;
+    }
+
+    public void generateParticle(Entity generator, Entity target) {
+        
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speed = generator.getParticleSpeed();
+        int maxLife = generator.getParticleMaxLife();
+
+        Particle p1 = new Particle(gp, target, color, size, speed, maxLife, -2, -1);
+        Particle p2 = new Particle(gp, target, color, size, speed, maxLife, 2, -1);
+        Particle p3 = new Particle(gp, target, color, size, speed, maxLife, -2, 1);
+        Particle p4 = new Particle(gp, target, color, size, speed, maxLife, 2, 1);
+        gp.particleList.add(p1);
+        gp.particleList.add(p2);
+        gp.particleList.add(p3);
+        gp.particleList.add(p4);
+        
+    }
+
     public void update() {
         setAction();
         
@@ -113,6 +151,7 @@ public class Entity {
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.monster);
+        gp.cChecker.checkEntity(this, gp.iTile);
   
         // CHECK PLAYER COLLISION - FOR MONSTER ONLY
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
@@ -148,8 +187,8 @@ public class Entity {
                 invincibleCounter = 0;
             }
         }
-        if (shotAvailableCounter < 40){
-            shotAvailableCounter ++;
+        if (shotAvailableCounter < 45){
+            shotAvailableCounter++;
         } 
     }
 
