@@ -8,58 +8,62 @@ import java.io.IOException;
 
 public class Config {
     GamePanel gp;
-    public Config (GamePanel gp){
+
+    public Config(GamePanel gp) {
         this.gp = gp;
     }
 
-    public void saveConfig(){
+    public void saveConfig() {
         try {
-            BufferedWriter  bw = new BufferedWriter(new FileWriter("config.txt"));
-
-            //FULL SCREEN
-            if (gp.fullScreenOn == true);{
+            BufferedWriter bw =  new BufferedWriter(new FileWriter("config.txt"));
+        
+            // FULL SCREEN
+            if(gp.fullScreenOn == true){
                 bw.write("On");
-            }
 
-            if (gp.fullScreenOn == false){
+            }
+            if(gp.fullScreenOn == false){
                 bw.write("Off");
             }
             bw.newLine();
 
-            //MUSIC VOLUME
+            // MUSIC
             bw.write(String.valueOf(gp.music.volumeScale));
-             bw.newLine();
+            bw.newLine();
 
-            // SE volume
+            // SOUND EFFECTS
             bw.write(String.valueOf(gp.se.volumeScale));
             bw.newLine();
 
             bw.close();
+
+
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
     }
 
-    public void loadConfig(){
+
+    public void loadConfig() {
         try {
             BufferedReader br = new BufferedReader(new FileReader("config.txt"));
-
+            
             String s = br.readLine();
 
-            // Full screen
-            if(s.equals("On")) {
+            // FULL SCREEN
+            if (s.equals("On")){
                 gp.fullScreenOn = true;
             }
-            if(s.equals("Off")) {
+            if (s.equals("Off")){
                 gp.fullScreenOn = false;
             }
 
-            // Music volume
+            // MUSIC VOLUME
             s = br.readLine();
             gp.music.volumeScale = Integer.parseInt(s);
 
-            // SE volume
+            // SE VOLUME
             s = br.readLine();
             gp.se.volumeScale = Integer.parseInt(s);
 
@@ -69,4 +73,5 @@ public class Config {
             e.printStackTrace();
         }
     }
+
 }

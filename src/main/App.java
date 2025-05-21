@@ -9,7 +9,6 @@ public class App {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("2D Adventure");
-        // window.setUndecorated(true);
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
@@ -19,6 +18,11 @@ public class App {
             window.setUndecorated(true);
         }
  
+        gamePanel.config.loadConfig();
+        if(gamePanel.fullScreenOn == true){
+            window.setUndecorated(true);
+        }
+
         window.pack();
 
         window.setLocationRelativeTo(null);
