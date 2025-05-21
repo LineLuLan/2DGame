@@ -52,6 +52,11 @@ public class KeyHandler implements KeyListener{
             optionsState(code);
         }
 
+        //GAME OVER STATE
+        else if (gp.gameState == gp.gamveOverState  ){
+            gameOverState(code);
+        }
+
     }
 
     public void titleState(int code){
@@ -176,7 +181,10 @@ public class KeyHandler implements KeyListener{
             }
         }
         if (code == KeyEvent.VK_R){
-            gp.tileM.loadMap("./res/maps/worldV2.txt");
+            switch(gp.currentmap){
+                case 0 : gp.tileM.loadMap("./res/maps/worldV3.txt",0);break;
+                case 1 : gp.tileM.loadMap("./res/maps/interior01.txt",0);break;
+            }
         }
 
     }
@@ -288,6 +296,33 @@ public class KeyHandler implements KeyListener{
         }
     }
 
+    public void gameOverState(int code){
+        if(code == KeyEvent.VK_W){
+            gp.ui.commandNum--;
+            if(gp.ui.commandNum < 0){
+            gp.ui.commandNum = 1;
+            } 
+            gp.playSE(9);
+        }
+        if(code == KeyEvent.VK_S){
+            gp.ui.commandNum++;
+            if(gp.ui.commandNum > 1){
+            gp.ui.commandNum = 0;
+            } 
+            gp.playSE(9);
+        }
+        if (code == KeyEvent.VK_ENTER){
+            if(gp.ui.commandNum == 0){
+                gp.gameState = gp.playState;
+                gp.retry();
+                gp.playMusic(0);
+            }
+            else if (gp.ui.commandNum == 1){
+                gp.gameState = gp.titleState;
+                gp.restart();
+            }
+        }
+    }
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
