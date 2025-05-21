@@ -12,5 +12,6 @@ public class OBJ_Key extends Entity {
         down1 = setUp("objects/key", gp.tileSize, gp.tileSize);
         collision = true;
         description = "[" + name+ "]\nIt's for open treasure"; 
+        price = 100;
     }
 }
