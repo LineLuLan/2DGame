@@ -1,6 +1,8 @@
 package main;
 
 import com.sun.tools.javac.Main;
+
+import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
 import java.awt.*;
@@ -28,12 +30,13 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     // SYSTEM 
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
 
     public Config config = new Config(this);
+    public PathFinder pFinder = new PathFinder(this);
     
     public UI ui = new UI(this);
     // chuyen max map len day thì mới ko lỗi ở phần player and object
@@ -61,6 +64,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterState = 4;
     public final int optionsState = 5;
     public final int gamveOverState = 6; 
+    public final int transtionState = 7;
+    public final int tradeState = 8;
 
     //SOUND
     Sound music = new Sound();
@@ -195,7 +200,7 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                     if (monster[currentmap][i].alive == false) {
                         monster[currentmap][i].checkDrop();
-                        monster[i] = null;
+                        monster[currentmap][i] = null;
                     }
                     // monster[i].update();
                 }

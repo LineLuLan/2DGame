@@ -1,5 +1,6 @@
 package main;
 
+import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.MON_GreenSlime;
 import object.OBJ_Axe;
@@ -54,7 +55,8 @@ public class AssetSetter {
         i++;
 
         mapNum= 1; 
-        gp.npc[mapNum][i] = new NPC_OldMan(gp);
+        i = 0;
+        gp.npc[mapNum][i] = new NPC_Merchant(gp);
         gp.npc[mapNum][i].worldX = gp.tileSize * 12;
         gp.npc[mapNum][i].worldY = gp.tileSize * 7;
 
@@ -106,7 +108,6 @@ public class AssetSetter {
         i++;
         gp.iTile[mapNum][i] = new IT_DryTree(gp, 13, 40);
         i++;
-
-
+        
     }
 }
