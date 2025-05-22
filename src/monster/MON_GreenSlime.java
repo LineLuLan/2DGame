@@ -17,7 +17,8 @@ public class MON_GreenSlime extends Entity{
 
         type = type_monster;
         name = "Green Slime";
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
         maxLife = 5;
         life = maxLife;
         attack = 5;
@@ -76,14 +77,20 @@ public class MON_GreenSlime extends Entity{
             int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
 
             searchPath(goalCol, goalRow);
-
-            int i = new Random().nextInt(100) + 1;
-            int requiredShotCooldown = 45; 
-            if (i > 197 && projectile.alive == false
-            && shotAvailableCounter >= requiredShotCooldown) {
+        
+            int i = new Random().nextInt(200) + 1;
+            int requiredShotCooldown = 30; 
+            if (i > 197 && projectile.alive == false && shotAvailableCounter >= requiredShotCooldown) {
             
                 projectile.set(worldX, worldY, direction, true, this);
-                gp.projectileList.add(projectile);
+//                gp.projectileList.add(projectile);
+
+//                for(int ii = 0; ii < gp.projectile[1].length; ii ++){
+//                    if(gp.projectile[gp.currentmap][ii] == null){
+//                        gp.projectile[gp.currentmap][ii] = projectile;
+//                        break;
+//                    }
+ //               }
                 shotAvailableCounter = 0;
             }
 
