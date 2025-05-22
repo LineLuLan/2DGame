@@ -17,6 +17,7 @@ public class OBJ_Potion_Red extends Entity {
         collision = true;
         description = "[" + name+ "]\nRestore Hp by " + value + "."; 
         price = 25;
+        stackable = true;
     }
     public boolean  use(Entity entity){
         gp.gameState = gp.dialogueState;

@@ -16,6 +16,7 @@ public class OBJ_Key extends Entity {
         collision = true;
         description = "[" + name+ "]\nIt's for open treasure"; 
         price = 100;
+        stackable = true;
     }
     public boolean use(Entity entity){
         gp.gameState = gp.dialogueState;
