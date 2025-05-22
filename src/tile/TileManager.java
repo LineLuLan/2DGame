@@ -166,12 +166,11 @@ public class TileManager {
                     worldRow++;
                 }
         }
-        
-        // The path way drawing
+
         if (drawPath == true){
             g2.setColor(new Color(255,0,0,70));
 
-            for (int i = 0; i < gp.pFinder.pathList.size(); i++){
+            for (int i = 0; i < gp.pFinder.pathList.size(); i ++){
                 int worldX = gp.pFinder.pathList.get(i).col * gp.tileSize;
                 int worldY = gp.pFinder.pathList.get(i).row * gp.tileSize;
                 int screenX = worldX - gp.player.worldX + gp.player.screenX;
@@ -179,8 +178,6 @@ public class TileManager {
 
                 g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);
             }
-            
         }
-    
     }
 }

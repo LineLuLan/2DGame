@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-
-import ai.Node;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -403,12 +401,12 @@ public class Entity {
             }
 
             // Stop when reach goal
-            int nextCol = gp.pFinder.pathList.get(0).col;
-            int nextRow = gp.pFinder.pathList.get(0).row;
+//            int nextCol = gp.pFinder.pathList.get(0).col;
+//            int nextRow = gp.pFinder.pathList.get(0).row;
 
-            if (nextCol == goalCol && nextRow == goalRow){
-                onPath = false;
-            }
+//            if (nextCol == goalCol && nextRow == goalRow){
+//                onPath = false;
+//            }
         }
     }
 

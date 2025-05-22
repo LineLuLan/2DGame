@@ -300,6 +300,7 @@ public class KeyHandler implements KeyListener{
                 gp.playMusic(0);
             }
             else if (gp.ui.commandNum == 1){
+                gp.ui.titleScreenState = 0;
                 gp.gameState = gp.titleState;
                 gp.ui.titleScreenState = 0;
                 gp.restart();

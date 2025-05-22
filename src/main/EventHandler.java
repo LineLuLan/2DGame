@@ -51,9 +51,6 @@ public class EventHandler {
             if (hit(0,23, 12, "any") == true) {
                 healingPool(gp.dialogueState);
             }
-            else if (hit(0, 27, 16, "any") == true) {
-                teleport(gp.dialogueState);
-            } 
             else if (hit(0,10,39,"any") == true){
                 teleport(1,12,13);
             }
@@ -89,26 +86,10 @@ public class EventHandler {
             gp.player.solidArea.y = gp.player.solidAreaDefaultY;
             eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
             eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;  
-            }
-            gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
-            gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
-            eventRect[map][col][row].x = col * gp.tileSize + eventRect[map][col][row].x;
-            eventRect[map][col][row].y = row * gp.tileSize + eventRect[map][col][row].y;
-
-            if (gp.player.solidArea.intersects(eventRect[map][col][row]) && eventRect[map][col][row].eventDone == false) {
-                if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
-                   hit = true;
-                    previousEventX = gp.player.worldX;
-                    previousEventY = gp.player.worldY;
-                }
-            }
-
-            gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-            gp.player.solidArea.y = gp.player.solidAreaDefaultY;
-            eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
-            eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
-            return hit;
+        }
+    return hit;
     }
+
 
     public void teleport(int gameState){
         gp.gameState = gameState;
