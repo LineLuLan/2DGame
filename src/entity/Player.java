@@ -92,7 +92,8 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
+        
+
     }
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
@@ -309,6 +310,13 @@ public class Player extends Entity {
                 gp.obj[gp.currentmap][i].use(this);
                 gp.obj[gp.currentmap][i] = null;   
             }
+            //OBSTACLE
+            else if (gp.obj[gp.currentmap][i].type == type_obstacle) {
+                if(keyH.enteredPressed == true){
+                    attackCanceled = true;
+                    gp.obj[gp.currentmap][i].interact();
+                }
+            }
 
             //INVENTORY ITEMS
             else {
@@ -450,8 +458,9 @@ public class Player extends Entity {
                 defense = getDefense();
             }
             if (selectedItem.type == type_consumable){
-                selectedItem.use(this);
-                inventory.remove(itemIndex);
+                if(selectedItem.use(this) == true){
+                    inventory.remove(itemIndex);
+                }
             }
         }
     }
