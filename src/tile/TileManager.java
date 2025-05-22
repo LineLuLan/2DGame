@@ -80,6 +80,9 @@ public class TileManager {
         setUp(39, "earth", false);
         setUp(40, "wall", true);
         setUp(41, "tree", true);
+        setUp(42, "hut", true);
+        setUp(43, "floor01", true);
+        setUp(44, "table01", true);
 
         setUp(42, "hut", false);
         setUp(43, "floor01", false);

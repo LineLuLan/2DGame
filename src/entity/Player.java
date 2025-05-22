@@ -244,7 +244,6 @@ public class Player extends Entity {
             gp.stopMusic();
             gp.playSE(12);
         }
-
     }
     
     public void attacking() {

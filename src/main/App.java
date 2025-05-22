@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 public class App {
     public static JFrame window;
-
     public static void main(String[] args) throws Exception {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -13,6 +12,11 @@ public class App {
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
+
+        gamePanel.config.loadConfig();
+        if (gamePanel.fullScreenOn == true){
+            window.setUndecorated(true);
+        }
  
         gamePanel.config.loadConfig();
         if(gamePanel.fullScreenOn == true){
