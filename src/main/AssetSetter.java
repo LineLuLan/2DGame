@@ -4,9 +4,6 @@ import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.MON_GreenSlime;
 import object.OBJ_Axe;
-import object.OBJ_Key;
-import object.OBJ_Potion_Red;
-import object.OBJ_Shield_Blue;
 import tile_interactive.IT_DryTree;
 
 public class AssetSetter {
@@ -19,30 +16,30 @@ public class AssetSetter {
     public void setObject() {
         int i = 0;
         int mapNum= 0; 
-        gp.obj[mapNum][i] = new OBJ_Key(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*25;
-        gp.obj[mapNum][i].worldY = gp.tileSize*23;
-        i++;
-        gp.obj[mapNum][i] = new OBJ_Key(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*21;
-        gp.obj[mapNum][i].worldY = gp.tileSize*19;
-        i++;
-        gp.obj[mapNum][i] = new OBJ_Key(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*26;
-        gp.obj[mapNum][i].worldY = gp.tileSize*21;
-        i++;
+//        gp.obj[mapNum][i] = new OBJ_Key(gp);
+//        gp.obj[mapNum][i].worldX = gp.tileSize*25;
+//        gp.obj[mapNum][i].worldY = gp.tileSize*23;
+//        i++;
+    //    gp.obj[mapNum][i] = new OBJ_Key(gp);
+    //    gp.obj[mapNum][i].worldX = gp.tileSize*21;
+    //    gp.obj[mapNum][i].worldY = gp.tileSize*19;
+    //    i++;
+    //   gp.obj[mapNum][i] = new OBJ_Key(gp);
+    //    gp.obj[mapNum][i].worldX = gp.tileSize*26;
+    //    gp.obj[mapNum][i].worldY = gp.tileSize*21;
+    //    i++;
         gp.obj[mapNum][i] = new OBJ_Axe(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*33;
         gp.obj[mapNum][i].worldY = gp.tileSize*21;
         i++;
-        gp.obj[mapNum][i] = new OBJ_Shield_Blue(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*35;
-        gp.obj[mapNum][i].worldY = gp.tileSize*21;
-        i++;
-        gp.obj[mapNum][i] = new OBJ_Potion_Red(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*22;
-        gp.obj[mapNum][i].worldY = gp.tileSize*27;
-        i++;
+//        gp.obj[mapNum][i] = new OBJ_Shield_Blue(gp);
+//        gp.obj[mapNum][i].worldX = gp.tileSize*35;
+//        gp.obj[mapNum][i].worldY = gp.tileSize*21;
+ //       i++;
+//        gp.obj[mapNum][i] = new OBJ_Potion_Red(gp);
+//        gp.obj[mapNum][i].worldX = gp.tileSize*22;
+//        gp.obj[mapNum][i].worldY = gp.tileSize*27;
+//        i++;
 
     }
 
