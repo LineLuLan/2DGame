@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+
+import ai.Node;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -32,6 +34,7 @@ public class Entity {
     public boolean alive = true;
     public boolean dying = false;
     boolean hpBarOn = false;
+    public boolean onPath = false;
 
     
     // SUPER OBJECT
@@ -147,21 +150,25 @@ public class Entity {
         
     }
 
-    public void update() {
-        setAction();
-        
+    public void checkCollision(){
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.monster);
         gp.cChecker.checkEntity(this, gp.iTile);
-  
+
         // CHECK PLAYER COLLISION - FOR MONSTER ONLY
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
         if (this.type == type_monster && contactPlayer == true) {
             damagePlayer(attack);
         }
+    }
+
+    public void update() {
+        setAction();
+        
+        checkCollision();
 
         // CHECK ENTITY COLLISION
         if (collisionOn == false) {
@@ -223,7 +230,6 @@ public class Entity {
         
                 switch(direction) { 
                     case "up" -> {
-                        System.out.println("Direction: " + direction);
                         if (spriteNum == 1) {image = up1;}
                         if (spriteNum == 2) {image = up2;}
                         }        
@@ -328,6 +334,82 @@ public class Entity {
             e.printStackTrace();
         }
         return image;                                    
+    }
+
+
+    public void searchPath(int goalCol, int goalRow){
+        int startCol = (worldX + solidArea.x)/gp.tileSize;
+        int startRow = (worldY + solidArea.y)/gp.tileSize;
+
+        gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+
+        if (gp.pFinder.search() == true){
+            
+            // Next world X and Y
+            int nextX = gp.pFinder.pathList.get(0).col*gp.tileSize;
+            int nextY = gp.pFinder.pathList.get(0).row*gp.tileSize;
+
+            // Entity's solidArea position
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x + solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+
+            if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize){
+                direction = "up";
+            }
+            else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize){
+                direction = "down";
+            }
+            else if (enTopY >= nextY && enBottomY < nextY + gp.tileSize){
+                if(enLeftX > nextX){
+                    direction = "left";
+                }
+                if(enLeftX < nextX){
+                    direction = "right";
+                }
+            }
+            else if (enTopY > nextY && enLeftX > nextX){
+                // up or left
+                direction = "up";
+                checkCollision();
+                if(collisionOn == true){
+                    direction = "left";
+                }
+            }
+            else if(enTopY > nextY && enLeftX > nextX){
+                // up or right
+                direction = "up";
+                checkCollision();
+                if(collisionOn == true){
+                    direction = "right";
+                }
+            }
+            else if (enTopY < nextY && enLeftX > nextX){
+                // down or left
+                direction = "down";
+                checkCollision();
+                if(collisionOn == true){
+                    direction = "left";
+                }
+            }
+            else if (enTopY < nextY && enLeftX < nextX){
+                // down or right
+                direction = "down";
+                checkCollision();
+                if(collisionOn == true){
+                    direction = "right";
+                }
+            }
+
+            // Stop when reach goal
+            int nextCol = gp.pFinder.pathList.get(0).col;
+            int nextRow = gp.pFinder.pathList.get(0).row;
+
+            if (nextCol == goalCol && nextRow == goalRow){
+                onPath = false;
+            }
+        }
     }
 
 }

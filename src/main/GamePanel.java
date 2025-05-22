@@ -1,6 +1,8 @@
 package main;
 
 import com.sun.tools.javac.Main;
+
+import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
 import java.awt.*;
@@ -28,12 +30,13 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     // SYSTEM 
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
 
     public Config config = new Config(this);
+    public PathFinder pFinder = new PathFinder(this);
     
     public UI ui = new UI(this);
     // chuyen max map len day thì mới ko lỗi ở phần player and object
