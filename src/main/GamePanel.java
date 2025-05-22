@@ -1,10 +1,9 @@
 package main;
 
-import com.sun.tools.javac.Main;
-
 import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
+import environment.EnvironmentManager;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
+    public EnvironmentManager eManager = new EnvironmentManager(this);
     
     public UI ui = new UI(this);
     // chuyen max map len day thì mới ko lỗi ở phần player and object
@@ -48,7 +48,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity npc[][] =  new Entity[maxMap][10];
     public Entity monster[][] = new Entity[maxMap][20];
     public InteractiveTile iTile[][] = new InteractiveTile[maxMap][50];
-    public ArrayList<Entity> projectileList = new ArrayList<>();
+    public Entity projectile[][] = new Entity[maxMap][20];
+//    public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>(); 
     ArrayList<Entity> entityList = new ArrayList<>();
 
@@ -100,6 +101,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
+        eManager.setup();
 
         gameState = titleState;
 
@@ -207,23 +209,21 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             //PROJECTILE
-            for (int i = 0; i < projectileList.size(); i++) {
-                if(projectileList.get(i) != null) {
-                    Entity p = projectileList.get(i); // Gán vào biến để dễ đọc và hiệu quả hơn
-                    if (p.alive == true ) {
-                        p.update(); // Trong Projectile.update(), alive có thể bị set thành false
+            for (int i = 0; i < projectile[1].length; i++) {
+                if(projectile[currentmap][i] != null) {
+                    // Gán vào biến để dễ đọc và hiệu quả hơn
+                    if (projectile[currentmap][i].alive == true ) {
+                        projectile[currentmap][i].update(); // Trong Projectile.update(), alive có thể bị set thành false
                     }
                     // Sau khi update, kiểm tra lại trạng thái alive của projectile
                     // vì p.update() có thể đã thay đổi p.alive
-                    if (p.alive == false) {
-                        projectileList.remove(i);
-                        i--; // QUAN TRỌNG: Giảm i để không bỏ sót phần tử tiếp theo
+                    if (projectile[currentmap][i].alive == false) {
+                        projectile[currentmap][i] = null;
+                         // QUAN TRỌNG: Giảm i để không bỏ sót phần tử tiếp theo
                     }
-                } else { // Nếu vì lý do nào đó có phần tử null trong list
-                    projectileList.remove(i);
-                    i--; // Cũng cần giảm i
-                }
+                } 
             }
+            
 
 
             // PARTICLE
@@ -244,6 +244,9 @@ public class GamePanel extends JPanel implements Runnable {
                     iTile[currentmap][i].update();
                 }
             }
+
+            eManager.update();
+            
         }
 
         if (gameState == pauseState){
@@ -298,9 +301,9 @@ public class GamePanel extends JPanel implements Runnable {
                     entityList.add(monster[currentmap][i]);
                 }
             }
-            for (int i = 0; i < projectileList.size(); i++){
-                if (projectileList.get(i) != null) {
-                    entityList.add(projectileList.get(i));
+            for (int i = 0; i < projectile[1].length; i++){
+                if (projectile[currentmap][i] != null) {
+                    entityList.add(projectile[currentmap][i]);
                 }
             }
 
@@ -322,6 +325,9 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < entityList.size(); i++){
                 entityList.get(i).draw(g2);
             }
+
+            // ENVIRONMENT
+            eManager.draw(g2);
 
             // UI
             ui.draw(g2);

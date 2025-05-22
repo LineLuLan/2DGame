@@ -17,12 +17,14 @@ public class OBJ_Potion_Red extends Entity {
         collision = true;
         description = "[" + name+ "]\nRestore Hp by " + value + "."; 
         price = 25;
+        stackable = true;
     }
-    public void use(Entity entity){
+    public boolean  use(Entity entity){
         gp.gameState = gp.dialogueState;
         gp.ui.currentDialogue = "You drink the " + name + "!\n"
             + "Your life has been recovered by " + value +".";
         entity.life += value;
         gp.playSE(2);
+        return true;
     }
 }
