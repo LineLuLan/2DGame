@@ -20,8 +20,7 @@ public class Player extends Entity {
     public boolean moving = false;
     public int pixelCounter = 0;
     public boolean attackCanceled = false;
-
-    
+    public boolean lightUpdated = false;
 
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -455,6 +454,17 @@ public class Player extends Entity {
                 currentShield = selectedItem;
                 defense = getDefense();
             }
+            if(selectedItem.type == type_light){
+                
+                if (currentLight == selectedItem){
+                    currentLight = null;
+                } else {
+                    currentLight = selectedItem;
+                }
+
+                lightUpdated = true;
+            }
+
             if (selectedItem.type == type_consumable){
                 if(selectedItem.use(this) == true){
                     if (selectedItem.amount > 1){

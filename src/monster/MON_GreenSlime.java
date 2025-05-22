@@ -65,9 +65,9 @@ public class MON_GreenSlime extends Entity{
                 onPath = true;
             }
         }
-//        if(onPath = true && tileDistance > 10){
-//            onPath = false;
-//        }
+    //    if(onPath = true && tileDistance > 10){
+    //        onPath = false;
+    //    }
     }
     @Override
     public void setAction() {
@@ -75,6 +75,8 @@ public class MON_GreenSlime extends Entity{
             
             int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;
             int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
+
+            
 
             searchPath(goalCol, goalRow);
         
@@ -85,12 +87,12 @@ public class MON_GreenSlime extends Entity{
                 projectile.set(worldX, worldY, direction, true, this);
 //                gp.projectileList.add(projectile);
 
-                for(int ii = 0; ii < gp.projectile[1].length; ii ++){
-                    if(gp.projectile[gp.currentmap][ii] == null){
-                        gp.projectile[gp.currentmap][ii] = projectile;
-                        break;
-                    }
-               }
+            //     for(int ii = 0; ii < gp.projectile[1].length; ii ++){
+            //         if(gp.projectile[gp.currentmap][ii] == null){
+            //             gp.projectile[gp.currentmap][ii] = projectile;
+            //             break;
+            //         }
+            //    }
                 shotAvailableCounter = 0;
             }
 

@@ -3,6 +3,7 @@ package main;
 import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
+import environment.EnvironmentManager;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
+    public EnvironmentManager eManager = new EnvironmentManager(this);
     
     public UI ui = new UI(this);
     // chuyen max map len day thì mới ko lỗi ở phần player and object
@@ -99,6 +101,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
+        eManager.setup();
 
         gameState = titleState;
 
@@ -241,6 +244,9 @@ public class GamePanel extends JPanel implements Runnable {
                     iTile[currentmap][i].update();
                 }
             }
+
+            eManager.update();
+            
         }
 
         if (gameState == pauseState){
@@ -319,6 +325,9 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < entityList.size(); i++){
                 entityList.get(i).draw(g2);
             }
+
+            // ENVIRONMENT
+            eManager.draw(g2);
 
             // UI
             ui.draw(g2);
