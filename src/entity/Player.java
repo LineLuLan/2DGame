@@ -87,6 +87,7 @@ public class Player extends Entity {
         mana = maxMana;
         invincible = false;
         transparent = false;
+        
     }
 
     public void setItems(){

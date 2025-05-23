@@ -38,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
+    
     Map map = new Map(this);
     
     public UI ui = new UI(this);
@@ -132,7 +133,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
-
+        eManager.lighting.resetDay();
     }
 
 

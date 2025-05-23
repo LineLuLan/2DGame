@@ -122,4 +122,10 @@ public class Lighting {
         g2.setFont(g2.getFont().deriveFont(50f));
         g2.drawString(situation, 800,500);
     }
+    public void resetDay(){
+        dayState = day;
+        dayCounter = 0;
+        fillterAlpha = 0f;
+        setLightSource();
+    }
 }
