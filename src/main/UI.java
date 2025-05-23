@@ -16,7 +16,7 @@ public class UI {
     Graphics2D g2;
     Font arial_40, arial_80B;
     
-
+    public Font maruMonica;
     public boolean messageOn = false;
 //    public String message = ""; no need
 //    int messageCounter = 0;   no need 
