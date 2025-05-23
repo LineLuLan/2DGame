@@ -22,7 +22,9 @@ public class Entity {
     
     // ENTITY ATTRIBUTE
     public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
-    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2,
+    guardUp,guardDown,guardLeft,guardRight;
+
     public String direction = "down";
     public Rectangle solidArea= new Rectangle(0, 0, 45, 45);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
@@ -36,6 +38,9 @@ public class Entity {
     public boolean onPath = false;
     public boolean knockBack = false;
     public String knockBackDirection;
+    public boolean  guarding = false;
+    public boolean transparent = false;
+    public boolean  offBalance = false;
     
     // SUPER OBJECT
     public BufferedImage image, image2, image3;
@@ -55,6 +60,8 @@ public class Entity {
     public int hpBarCounter = 0;
     public int shotAvailableCounter = 0;
     public int knockBackCounter = 0;
+    public int guardCounter = 0;
+    int offBalanceCounter = 0;
 
     // CHARATER ATTRIBUTE
     public int maxLife;
@@ -267,6 +274,13 @@ public class Entity {
         if (shotAvailableCounter < 45){
             shotAvailableCounter++;
         } 
+        if(offBalance == true){
+            offBalanceCounter++;
+            if(offBalanceCounter > 60){
+                offBalance = false;
+                offBalanceCounter = 0;
+            }
+        }
     }
     public void checkAttackOrNot(int rate, int straight, int horizontal){
         boolean targetInRange = false;
@@ -362,6 +376,25 @@ public class Entity {
                 actionLockCounter = 0;
             }
     }
+    public String getOppositeDirection(String direction) {
+        String oppositeDirection = "";
+    
+        switch(direction) {
+            case "up": 
+                oppositeDirection = "down"; 
+                break;
+            case "down": 
+                oppositeDirection = "up"; 
+                break;
+            case "left": 
+                oppositeDirection = "right"; 
+                break;
+            case "right": 
+                oppositeDirection = "left"; 
+                break;
+        }
+        return oppositeDirection;
+    }
     public void attacking() {
         spriteCounter++;
         
@@ -421,12 +454,35 @@ public class Entity {
     }
     public void damagePlayer(int attack){
         if (gp.player.invincible == false ) {
-
-            gp.playSE(6);
             int damage = attack - gp.player.defense;
-            if (damage < 0){
-                damage = 0; 
+            //Get an opposite direction of this attacker
+            String canGuardDirection = getOppositeDirection(direction);
+            if(gp.player.guarding == true && gp.player.direction.equals(canGuardDirection)){
+                //parry
+                if(gp.player.guardCounter < 10){
+                    damage = 0;
+                    gp.playSE(16);
+                    setKnockBack(this, gp.player, knockBackPower);
+                    offBalance = true;
+                    spriteCounter -=60;
+                }
+                else{
+                    damage /= 3;
+                    gp.playSE(15);
+                }
             }
+            else{
+                //not guarding 
+                gp.playSE(6);
+                if (damage < 1){
+                    damage = 1; 
+                }
+            }
+            if(damage != 0){
+                gp.player.transparent = true;
+                setKnockBack(gp.player, this, knockBackPower);
+            }
+            
             gp.player.life -= damage;
             
             gp.player.invincible = true;
