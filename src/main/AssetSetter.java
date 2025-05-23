@@ -8,6 +8,7 @@ import object.OBJ_Chest;
 import object.OBJ_Door;
 import object.OBJ_Key;
 import object.OBJ_Lantern;
+import object.OBJ_Tent;
 import tile_interactive.IT_DryTree;
 
 public class AssetSetter {
@@ -52,6 +53,10 @@ public class AssetSetter {
         gp.obj[mapNum][i] = new OBJ_Chest(gp,new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = gp.tileSize*30;
         gp.obj[mapNum][i].worldY = gp.tileSize*28;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Tent(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*19;
+        gp.obj[mapNum][i].worldY = gp.tileSize*20;
         i++;
 //        gp.obj[mapNum][i] = new OBJ_Shield_Blue(gp);
 //        gp.obj[mapNum][i].worldX = gp.tileSize*35;

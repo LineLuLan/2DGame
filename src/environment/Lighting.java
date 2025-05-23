@@ -1,19 +1,24 @@
 package environment;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.Shape;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-
 import main.GamePanel;
 
 public class Lighting {
     GamePanel gp;
     BufferedImage darknessFilter;
+    public int dayCounter;
+    public float fillterAlpha = 0f;
+
+    //Day State
+    public final int day = 0;
+    public final int dusk = 1;
+    public final int night = 2;
+    public final int dawn = 3 ;
+    public int dayState = day;
 
     public Lighting (GamePanel gp){
         this.gp = gp;
@@ -27,7 +32,7 @@ public class Lighting {
         Graphics2D g2 = (Graphics2D)darknessFilter.getGraphics();
         
         if(gp.player.currentLight == null){
-            g2.setColor(new Color(0,0,0,0.98f));
+            g2.setColor(new Color(0,0,0.1f,0.98f));
 
         } else {
             int centerX = gp.player.screenX + (gp.tileSize)/2;
@@ -37,11 +42,11 @@ public class Lighting {
             Color color[] = new Color[5];
             float fraction[] = new float[5];
 
-            color[0] = new Color(0,0,0,0f);
-            color[1] = new Color(0,0,0,0.25f);
-            color[2] = new Color(0,0,0,0.5f);
-            color[3] = new Color(0,0,0,0.75f);
-            color[4] = new Color(0,0,0,0.98f);
+            color[0] = new Color(0,0,0.1f,0f);
+            color[1] = new Color(0,0,0.1f,0.25f);
+            color[2] = new Color(0,0,0.1f,0.5f);
+            color[3] = new Color(0,0,0.1f,0.75f);
+            color[4] = new Color(0,0,0.1f,0.98f);
 
             fraction[0] = 0f;
             fraction[1] = 0.25f;
@@ -66,9 +71,55 @@ public class Lighting {
             setLightSource();
             gp.player.lightUpdated = false;     
         }
+    
+        // Check the state of the day
+        if(dayState == day){
+            dayCounter ++;
+            if(dayCounter > 600){
+                dayState = dusk;
+                dayCounter = 0;
+            }
+        }
+        if (dayState == dusk){
+            fillterAlpha += 0.001f;
+            if (fillterAlpha > 1f){
+                fillterAlpha = 1f;
+                dayState = night;
+            }
+        }
+        if(dayState == night){
+            dayCounter++;
+
+            if(dayCounter > 36000){
+                dayState = dawn;
+                dayCounter = 0;
+            }
+        }
+        if(dayState == dawn){
+            fillterAlpha -= 0.001f;
+
+            if(fillterAlpha < 0f){
+                fillterAlpha = 0;
+                dayState = day;
+            }
+        }
     }
 
     public void draw(Graphics2D g2){
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fillterAlpha));
         g2.drawImage(darknessFilter, 0, 0, null);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        //debug
+        String situation ="";
+        switch(dayState){
+            case day: situation = "Day"; break;
+            case dusk: situation = "Dusk"; break;
+            case night: situation = "Night"; break;
+            case dawn: situation = "Dawn"; break;
+        }
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(50f));
+        g2.drawString(situation, 800,500);
     }
 }

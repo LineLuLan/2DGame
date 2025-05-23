@@ -1,12 +1,11 @@
 package environment;
 
 import java.awt.Graphics2D;
-
 import main.GamePanel;
 
 public class EnvironmentManager {
     GamePanel gp;
-    Lighting lighting;
+    public Lighting lighting;
 
     public EnvironmentManager(GamePanel gp){
         this.gp = gp;
