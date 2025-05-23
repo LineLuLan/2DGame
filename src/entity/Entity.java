@@ -41,15 +41,18 @@ public class Entity {
     public boolean  guarding = false;
     public boolean transparent = false;
     public boolean  offBalance = false;
+    public Entity loot;
+    public boolean opened = false;
     
     // SUPER OBJECT
     public BufferedImage image, image2, image3;
     public String name;
     public boolean collision = false;
     
-    public String dialogues[] = new String[20];
+    public String dialogues[][] = new String[20][20];
     public Entity attacker;
     public int dialogueIndex = 0;
+    public int dialogueSet = 0;
     
     // COUNTERS AND SPRITES
     public int invincibleCounter = 0;
@@ -559,7 +562,7 @@ public class Entity {
                     double oneScale = (double)gp.tileSize / maxLife;
                     double hpBarValue = oneScale*life;
 
-
+  
                     g2.setColor(new Color(35, 35, 35));
                     g2.fillRect(screenX-1, screenY - 16, gp.tileSize+2, 12);
 
@@ -630,25 +633,40 @@ public class Entity {
         int goalrow = (target.worldY + target.solidArea.y)/gp.tileSize;
         return goalrow;
     }
-    public void setAction() {}
+
+    public void resetCounter(){
+        invincibleCounter = 0;
+        actionLockCounter = 0;
+        spriteCounter = 0;
+        spriteNum = 1;
+        dyingCounter = 0;
+        hpBarCounter = 0;
+        shotAvailableCounter = 0;
+        knockBackCounter = 0;
+        guardCounter = 0;
+        offBalanceCounter = 0;
+    }
+
+    public void setLoot(Entity loot){}
+    public void setAction(){}
 
     public void damageReaction(){}
-
-    public void speak() {
-        if (dialogues[dialogueIndex] == null) {
-            dialogueIndex = 0;
-        }
-        gp.ui.currentDialogue  = dialogues[dialogueIndex];
-        dialogueIndex++;
+    public void speak(){}
+    public void facePlayer() {
 
         switch(gp.player.direction) {
-            case "up": direction = "down"; break;
-            case "down": direction = "up"; break;
-            case "left": direction = "right"; break;
-            case "right": direction = "left";break;
+            case "up" -> direction = "down";
+            case "down" -> direction = "up";
+            case "left" -> direction = "right";
+            case "right" -> direction = "left";
         }
     }
     
+    public void startDialogue(Entity entity, int setNum){
+        gp.gameState = gp.dialogueState;
+        gp.ui.npc = entity;
+        dialogueSet = setNum;
+    }
 
     public BufferedImage setUp(String imagePath, int width, int height) {
         UtilityTool uTool = new UtilityTool();
@@ -743,10 +761,10 @@ public class Entity {
         int nextWorldX = user.getLeftX();
         int nextWorldY = user.getTopY();
         switch(user.direction) {
-            case "up": nextWorldY = user.getTopY()-user.speed; break;    // change 1 to user.speed
-            case "down": nextWorldY = user.getBottomY()+user.speed; break;    // change 1 to user.speed
-            case "left": nextWorldX = user.getLeftX()-user.speed; break;    // change 1 to user.speed
-            case "right": nextWorldX = user.getRightX()+user.speed; break;    // change 1 to user.speed
+            case "up": nextWorldY = user.getTopY()- gp.player.speed; break;    // change 1 to user.speed
+            case "down": nextWorldY = user.getBottomY()+gp.player.speed; break;    // change 1 to user.speed
+            case "left": nextWorldX = user.getLeftX()-gp.player.speed; break;    // change 1 to user.speed
+            case "right": nextWorldX = user.getRightX()+gp.player.speed; break;    // change 1 to user.speed
         }
         int col = nextWorldX/gp.tileSize;
         int row = nextWorldY/gp.tileSize;

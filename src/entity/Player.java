@@ -43,10 +43,7 @@ public class Player extends Entity {
         //attackArea.height = 36;    
 
         setDefaultValues();
-        getImage();
-        getAttackImage();
-        setItems();
-        getGuardImage();
+
     }
 
     public void setDefaultValues() {
@@ -71,10 +68,17 @@ public class Player extends Entity {
         coin = 500;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        currentLight = null;
         projectile = new OBJ_Fireball(gp);
         // projectile = new OBJ_Rock(gp);
         attack = getAttack(); // The total attack value is decided by strength and weapon
         defense = getDefense(); //The total defense value is decided by dexterity and shield
+    
+        getImage();
+        getAttackImage();
+        setItems();
+        getGuardImage();
+        setDialogue();
     }
 
     public void setDefaultPosition(){
@@ -82,11 +86,17 @@ public class Player extends Entity {
         worldY = gp.tileSize * 21;
         direction = "down";
     }
-    public void restoreLifeAndMana(){
+    public void restoreStatus(){
         life = maxLife;
         mana = maxMana;
+        speed = defaultSpeed;
         invincible = false;
         transparent = false;
+        attacking = false;
+        guarding = false;
+        knockBack = false;
+        lightUpdated = true;
+
     }
 
     public void setItems(){
@@ -106,6 +116,25 @@ public class Player extends Entity {
     }
     public int getDefense(){
         return defense = strength * currentShield.defenseValue;
+    }
+
+    public int getCurrentWeaponSlot(){
+        int currentWeaponSlot = 0;
+        for (int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) == currentWeapon){
+                currentWeaponSlot = i;
+            }
+        }
+        return currentWeaponSlot;
+    }
+    public int getCurrentShieldSlot(){
+        int currentShieldSlot = 0;
+        for (int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) == currentShield){
+                currentShieldSlot = i;
+            }
+        }
+        return currentShieldSlot;
     }
 
     public void getImage() {
@@ -347,7 +376,6 @@ public class Player extends Entity {
         if (gp.keyH.enteredPressed == true) {
             if (i != 999) {
                 attackCanceled = true;
-                gp.gameState = gp.dialogueState;
                 gp.npc[gp.currentmap][i].speak();
             }
 //            gp.keyH.enteredPressed = false;
@@ -403,7 +431,10 @@ public class Player extends Entity {
         }
     }
 
-  
+    public void setDialogue(){
+        dialogues[0][0] = "You are level " + level + " now!\n"
+                + "You feel stronger!";
+    }
 
     public void damageInteractiveTile(int i) {
         if (i != 999 && gp.iTile[gp.currentmap][i].destructible == true 
@@ -444,10 +475,11 @@ public class Player extends Entity {
             projectile.attack +=1;
             attack = getAttack();
             defense = getDefense();
+
             gp.playSE(8);
             gp.gameState = gp.dialogueState;
-            gp.ui.currentDialogue = "You are level " + level + " now!\n"
-                + "You feel stronger!";
+
+            startDialogue(this, 0);
         }
     }
 
