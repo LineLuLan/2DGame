@@ -128,4 +128,5 @@ public class Lighting {
         g2.setFont(g2.getFont().deriveFont(50f));
         g2.drawString(situation, 800,500);
     }
+
 }
