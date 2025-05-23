@@ -16,7 +16,7 @@ public class UI {
     Graphics2D g2;
     Font arial_40, arial_80B;
     
-
+    public Font maruMonica;
     public boolean messageOn = false;
 //    public String message = ""; no need
 //    int messageCounter = 0;   no need 
@@ -31,6 +31,8 @@ public class UI {
     int subState = 0;
     int counter = 0;
     public Entity npc; 
+    int charIndex = 0;
+    String combinedText = "";
 
     public boolean gameFinished = false;
     
@@ -303,6 +305,40 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
         x += gp.tileSize;
         y += gp.tileSize;
+
+        if (npc.dialogues[npc.dialogueSet][npc.dialogueIndex] != null) {
+
+            // currentDialogue = npc.dialogues[npc.dialogueSet][npc.dialogueIndex];
+            char characters[] = npc.dialogues[npc.dialogueSet][npc.dialogueIndex].toCharArray();
+
+            if (charIndex < characters.length) {
+                gp.playSE(17);
+                String s = String.valueOf(characters[charIndex]);
+                combinedText = combinedText + s;
+                currentDialogue = combinedText;
+                charIndex++;
+            }
+
+            if (gp.keyH.enteredPressed == true) {
+
+                charIndex = 0;
+                combinedText = "";
+
+                if (gp.gameState == gp.dialogueState) {
+
+                    npc.dialogueIndex++;
+                    gp.keyH.enteredPressed = false;
+                }           
+            }
+        }
+        else { // If no text is in the array
+            npc.dialogueIndex = 0;
+
+            if (gp.gameState == gp.dialogueState) {
+            gp.gameState = gp.playState;
+            }
+        }
+
 
         for (String line : currentDialogue.split("\n")) {
             g2.drawString(line, x, y);
@@ -825,6 +861,7 @@ public class UI {
                 subState = 0;
                 titleScreenState = 0;
                 gp.gameState = gp.titleState;
+                gp.resetGame(true);
             }
         }
 
@@ -853,6 +890,8 @@ public class UI {
     }
 
     public void trade_select(){
+
+        npc.dialogueSet = 0;
         drawDialogueScreen();
 
         // draw miniOption
@@ -885,8 +924,8 @@ public class UI {
             g2.drawString(">",x - 24,y);
             if(gp.keyH.enteredPressed == true){
                 commandNum = 0;
-                gp.gameState = gp.dialogueState;
-                currentDialogue = "Come again, hehe!";
+                npc.startDialogue(npc, 1);
+            
             }
         }
         
@@ -933,9 +972,8 @@ public class UI {
             if(gp.keyH.enteredPressed == true){
                 if(npc.inventory.get(itemIndex).price > gp.player.coin){
                     subState = 0;
-                    gp.gameState = gp.dialogueState;
-                    currentDialogue = "You need more coin to buy that";
-                    drawDialogueScreen();
+                    npc.startDialogue(npc, 2);
+                  
                 }
                 else{
                     if(gp.player.canObtainItem(npc.inventory.get(itemIndex)) == true){
@@ -943,8 +981,7 @@ public class UI {
                     }
                     else{
                         subState = 0;
-                        gp.gameState = gp.dialogueState;
-                        currentDialogue = "You cannot carry any more!";
+                        npc.startDialogue(npc, 3);
                     }
                 }   
             }
@@ -997,8 +1034,7 @@ public class UI {
                     gp.player.inventory.get(itemIndex) == gp.player.currentShield){
                         commandNum = 0;
                         subState = 0;
-                        gp.gameState = gp.dialogueState;
-                        currentDialogue = "You cannot sell an equipped item!";
+                        npc.startDialogue(npc, 4);
                     }
                 else {
                     if(gp.player.inventory.get(itemIndex).amount > 1){
@@ -1016,20 +1052,20 @@ public class UI {
     public void drawSleepScreen(){
         counter++;
         if(counter < 120){
-            gp.eManager.lighting.fillterAlpha += 0.01f;
-            if(gp.eManager.lighting.fillterAlpha > 1f){
-                gp.eManager.lighting.fillterAlpha = 1f;
+            gp.eManager.lighting.filterAlpha += 0.01f;
+            if(gp.eManager.lighting.filterAlpha > 1f){
+                gp.eManager.lighting.filterAlpha = 1f;
             }
         }
         if(counter >= 120){
-            gp.eManager.lighting.fillterAlpha -= 0.01f;
-            if(gp.eManager.lighting.fillterAlpha <= 0f){
-                gp.eManager.lighting.fillterAlpha = 0f;
+            gp.eManager.lighting.filterAlpha -= 0.01f;
+            if(gp.eManager.lighting.filterAlpha <= 0f){
+                gp.eManager.lighting.filterAlpha = 0f;
                 counter = 0;
                 gp.eManager.lighting.dayState = gp.eManager.lighting.day;
                 gp.eManager.lighting.dayCounter = 0;
                 gp.gameState = gp.playState;
-                gp.player.getPlayerImage();
+                gp.player.getImage();
             }
         }
     }

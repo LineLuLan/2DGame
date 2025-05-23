@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
     GamePanel gp;
-    public boolean upPressed, downPressed, rightPressed, leftPressed, enteredPressed, shotKeyPressed;
+    public boolean upPressed, downPressed, rightPressed, leftPressed, enteredPressed, shotKeyPressed,spacePressed;
 
     public boolean showDebugText = false;
 
@@ -61,6 +61,10 @@ public class KeyHandler implements KeyListener{
         else if (gp.gameState == gp.tradeState  ){
             tradeState(code);
         }
+        //Game map state
+        else if (gp.gameState == gp.mapState  ){
+            mapState(code);
+        }
 
     }
 
@@ -89,7 +93,9 @@ public class KeyHandler implements KeyListener{
                 }
 
                 if (gp.ui.commandNum == 1) {
-
+                    gp.saveLoad.load();
+                    gp.ui.titleScreenState = 1;
+                    gp.playMusic(0);
                 }
 
                 if (gp.ui.commandNum == 2) {
@@ -177,6 +183,20 @@ public class KeyHandler implements KeyListener{
         if (code == KeyEvent.VK_ESCAPE){
             gp.gameState = gp.optionsState;
         }
+        if (code == KeyEvent.VK_M){
+            gp.gameState = gp.mapState;
+        }
+        if (code == KeyEvent.VK_SPACE){
+            spacePressed = true;
+        }
+        if (code == KeyEvent.VK_X){
+            if(gp.map.miniMapOn == false){
+                gp.map.miniMapOn = true;
+            }
+            else{
+                gp.map.miniMapOn = false;
+            }
+        }
 
         //DEBUG
         if (code == KeyEvent.VK_T){
@@ -203,7 +223,8 @@ public class KeyHandler implements KeyListener{
 
     public void dialogueState(int code){
         if (code == KeyEvent.VK_ENTER) {
-            gp.gameState = gp.playState;
+            // gp.gameState = gp.playState;
+            enteredPressed = true;
         }
     }
 
@@ -296,14 +317,14 @@ public class KeyHandler implements KeyListener{
         if (code == KeyEvent.VK_ENTER){
             if(gp.ui.commandNum == 0){
                 gp.gameState = gp.playState;
-                gp.retry();
+                gp.resetGame(false);
                 gp.playMusic(0);
             }
             else if (gp.ui.commandNum == 1){
                 gp.ui.titleScreenState = 0;
                 gp.gameState = gp.titleState;
                 gp.ui.titleScreenState = 0;
-                gp.restart();
+                gp.resetGame(true);
             }
         }
     }
@@ -340,7 +361,11 @@ public class KeyHandler implements KeyListener{
             }
         }
     }
-
+    public void mapState(int code){
+        if(code == KeyEvent.VK_M){
+            gp.gameState = gp.playState;
+        }
+    }
     public void playerInventory(int code){
         if (code == KeyEvent.VK_W){
             if ( gp.ui.playerSlotRow != 0 ){
@@ -413,6 +438,12 @@ public class KeyHandler implements KeyListener{
         }
         if (code == KeyEvent.VK_F) {
             shotKeyPressed = false;
+        }
+        if (code == KeyEvent.VK_SPACE) {
+            spacePressed = false;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enteredPressed = false;
         }
     }    
 }
