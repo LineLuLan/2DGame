@@ -32,6 +32,7 @@ public class Sound {
             soundURL[11] = new File("res/sound/cuttree.wav").toURI().toURL();
             soundURL[12] = new File("res/sound/gameover.wav").toURI().toURL();
             soundURL[13] = new File("res/sound/stairs.wav").toURI().toURL();
+            soundURL[14] = new File("res/sound/sleep.wav").toURI().toURL();
 
     
         } catch (Exception e) {

@@ -8,6 +8,7 @@ import main.GamePanel;
 import main.KeyHandler;
 import object.OBJ_Fireball;
 import object.OBJ_Key;
+import object.OBJ_Lantern;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
@@ -91,6 +92,7 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Lantern(gp));
         
 
     }
@@ -114,7 +116,16 @@ public class Player extends Entity {
         left2 = setUp("player/Line_left2", gp.tileSize, gp.tileSize);  
 
     }
-
+    public void getSleepingImage(BufferedImage image){
+        up1 = image;
+        up2 = image;
+        down1 = image;
+        down2 =image;
+        right1 = image;
+        right2 = image;
+        left1 = image;
+        left2 = image;
+    }
     public void getPlayerAttackImage() {
 
         if (currentWeapon.type == type_sword ){
