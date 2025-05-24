@@ -182,6 +182,16 @@ public class Player extends Entity {
             attackRight1 = setUp("player/Line_axe_right1", gp.tileSize*2, gp.tileSize);
             attackRight2 = setUp("player/Line_axe_right2", gp.tileSize*2, gp.tileSize);
         }
+        if (currentWeapon.type == type_pickaxe){
+            attackUp1 = setUp("player/Line_pick_up1", gp.tileSize, gp.tileSize*2);
+            attackUp2 = setUp("player/Line_pick_up2", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setUp("player/Line_pick_down1", gp.tileSize, gp.tileSize*2);
+            attackDown2 = setUp("player/Line_pick_down2", gp.tileSize, gp.tileSize*2);
+            attackLeft1 = setUp("player/Line_pick_left1", gp.tileSize*2, gp.tileSize);
+            attackLeft2 = setUp("player/Line_pick_left2" , gp.tileSize*2, gp.tileSize);
+            attackRight1 = setUp("player/Line_pick_right1", gp.tileSize*2, gp.tileSize);
+            attackRight2 = setUp("player/Line_pick_right2", gp.tileSize*2, gp.tileSize);
+        }
     }
     public void getGuardImage(){
         guardUp = setUp("player/Line_guard_up", gp.tileSize, gp.tileSize);
@@ -377,13 +387,17 @@ public class Player extends Entity {
     }
 
     public void interactNPC(int i) {
-        if (gp.keyH.enteredPressed == true) {
-            if (i != 999) {
+        if (i != 999) {
+            if (gp.keyH.enteredPressed == true){
+
                 attackCanceled = true;
                 gp.npc[gp.currentmap][i].speak();
             }
-//            gp.keyH.enteredPressed = false;
+            gp.npc[gp.currentmap][i].move(direction);
+            //            gp.keyH.enteredPressed = false;
         }
+
+        
     }
 
     public void contactMonster(int i) {
@@ -454,7 +468,6 @@ public class Player extends Entity {
 
                 if (gp.iTile[gp.currentmap][i].life <= 0) {
                     gp.iTile[gp.currentmap][i] = gp.iTile[gp.currentmap][i].getDestroyedForm();
-                    
                 }
                 
 
@@ -494,7 +507,7 @@ public class Player extends Entity {
         if(itemIndex < inventory.size()){
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.type == type_sword || selectedItem.type == type_axe ){
+            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe){
                 currentWeapon = selectedItem; 
                 attack = getAttack();
                 getAttackImage();

@@ -38,6 +38,9 @@ public class Sound {
             soundURL[17] = new File("res/sound/speak.wav").toURI().toURL();
             soundURL[18] = new File("res/sound/Merchant.wav").toURI().toURL();
             soundURL[19] = new File("res/sound/Dungeon.wav").toURI().toURL();
+            soundURL[20] = new File("res/sound/chipwall.wav").toURI().toURL();
+            soundURL[21] = new File("res/sound/dooropen.wav").toURI().toURL();
+
 
 
         } catch (Exception e) {
