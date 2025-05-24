@@ -552,6 +552,8 @@ public class UI {
                     g2.drawString(line, textX, textY);
                     textY += 32;
                 }
+                // Durability
+                g2.drawString("Durability:"+ entity.inventory.get(itemIndex).durability,textX,textY+100);
             }
         }
         
@@ -608,6 +610,7 @@ public class UI {
             gp.player.worldY = gp.tileSize * gp.eHandler.temRow;
             gp.eHandler.previousEventX = gp.player.worldX;
             gp.eHandler.previousEventY = gp.player.worldY;
+            gp.changeArea();
         }
     }
 

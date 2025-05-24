@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
-import java.util.logging.Filter;
 import main.GamePanel;
 
 public class Lighting {
@@ -112,8 +111,12 @@ public class Lighting {
     }
 
     public void draw(Graphics2D g2){
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
-        g2.drawImage(darknessFilter, 0, 0, null);
+        if(gp.currentAre == gp.outside){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
+        }
+        if(gp.currentAre == gp.outside || gp.currentAre == gp.dungeon){
+            g2.drawImage(darknessFilter, 0, 0, null);
+        }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         //debug

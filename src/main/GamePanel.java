@@ -40,6 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
     public PathFinder pFinder = new PathFinder(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
     public SaveLoad saveLoad = new SaveLoad(this);
+    public EntityGenerator eGenerator = new EntityGenerator(this);
 
     Map map = new Map(this);
     
@@ -74,6 +75,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int tradeState = 8;
     public final int sleepState = 9;
     public final int mapState = 10;
+
+    //AREA
+    public  int currentAre;
+    public int nextArea;
+    public final int outside = 50;
+    public final int indoor = 51;
+    public final int dungeon = 52;
+
 
     //SOUND
     Sound music = new Sound();
@@ -111,6 +120,7 @@ public class GamePanel extends JPanel implements Runnable {
         eManager.setup();
 
         gameState = titleState;
+        currentAre = outside;
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -389,5 +399,20 @@ public class GamePanel extends JPanel implements Runnable {
         se.setFile(i);
         se.play();
     }
-
+    public void changeArea(){
+        if(nextArea != currentAre){
+            stopMusic();
+            if(nextArea == outside){
+                playMusic(0);
+            }
+            if(nextArea == indoor){
+                playMusic(18);
+            }
+            if(nextArea == dungeon){
+                playMusic(19);
+            }
+        }
+        currentAre = nextArea;
+        aSetter.setMonster();
+    }
 }

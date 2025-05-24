@@ -4,12 +4,12 @@ import entity.Entity;
 import main.GamePanel;
 
 public class OBJ_Door extends Entity {
-
+    public static final String objName = "Door";
     public OBJ_Door(GamePanel gp) {
         super(gp);
         
         type = type_obstacle;
-        name = "Door";
+        name = objName;
         down1 = setUp("objects/door", gp.tileSize, gp.tileSize);
         collision = true;
 

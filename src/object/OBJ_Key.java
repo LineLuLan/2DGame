@@ -4,13 +4,14 @@ import entity.Entity;
 import main.GamePanel;
 
 public class OBJ_Key extends Entity {
+    public static final String objName = "Key";
     GamePanel gp;
     public OBJ_Key(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
         type = type_consumable;
-        name = "Key"; 
+        name = objName; 
 
         down1 = setUp("objects/key", gp.tileSize, gp.tileSize);
         collision = true;
