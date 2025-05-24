@@ -40,6 +40,7 @@ public class Sound {
             soundURL[19] = new File("res/sound/Dungeon.wav").toURI().toURL();
             soundURL[20] = new File("res/sound/chipwall.wav").toURI().toURL();
             soundURL[21] = new File("res/sound/dooropen.wav").toURI().toURL();
+            soundURL[22] = new File("res/sound/FinalBattle.wav").toURI().toURL();
 
 
 

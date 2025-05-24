@@ -646,9 +646,9 @@ public class Player extends Entity {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
 
-
-
-        g2.drawImage(image, tempScreenX, tempScreenY, null);
+        if(drawing == true){
+            g2.drawImage(image, tempScreenX, tempScreenY, null);
+        }
 
         // RESET ALPHA
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
