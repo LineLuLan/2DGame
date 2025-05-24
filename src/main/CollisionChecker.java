@@ -70,6 +70,13 @@ public class CollisionChecker {
 
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
+
+        // Use a tamporal direction when it's being knockback
+        String direction = entity.direction;
+        if(entity.knockBack == true){
+            direction = entity.knockBackDirection;
+        }
+
         for (int i = 0; i < gp.obj[1].length; i++) {
             if (gp.obj[gp.currentmap][i] != null) {
 
@@ -81,7 +88,7 @@ public class CollisionChecker {
                 gp.obj[gp.currentmap][i].solidArea.x = gp.obj[gp.currentmap][i].worldX + gp.obj[gp.currentmap][i].solidArea.x;
                 gp.obj[gp.currentmap][i].solidArea.y = gp.obj[gp.currentmap][i].worldY + gp.obj[gp.currentmap][i].solidArea.y;
 
-                switch(entity.direction) {
+                switch(direction) {
                     case "up" -> entity.solidArea.y -= entity.speed;
                     case "down" -> entity.solidArea.y += entity.speed;
                     case "left" -> entity.solidArea.x -= entity.speed;

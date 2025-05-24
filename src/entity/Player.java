@@ -61,7 +61,7 @@ public class Player extends Entity {
         maxMana = 4;
         mana = maxMana;
         ammo = 10;
-        strength = 1; //The more strength she has, the more damage he gives
+        strength = 10; //The more strength she has, the more damage he gives
         dexterity = 1; //The more dexterity she has, the less damage she receives
         exp = 0;
         nextLevelExp = 5;
@@ -82,6 +82,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultPosition(){
+        gp.currentmap = 0;
+
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         direction = "down";
@@ -345,12 +347,14 @@ public class Player extends Entity {
         if (mana > maxMana) {
             mana = maxMana;
         }  
-        if (life <= 0){
-            gp.gameState = gp.gamveOverState;
-            gp.ui.commandNum = -1;
-            gp.stopMusic();
-            gp.playSE(12);
-        }
+        if (keyH.godModeOn == false){
+            if (life <= 0){
+                gp.gameState = gp.gamveOverState;
+                gp.ui.commandNum = -1;
+                gp.stopMusic();
+                gp.playSE(12);
+            }
+        } 
     }
     
     

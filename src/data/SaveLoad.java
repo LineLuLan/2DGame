@@ -100,60 +100,34 @@ public class SaveLoad {
             }
 
             // LOAD CURRENT WEAPON AND SHIELD
-            // Thực hiện sau khi inventory đã được load xong
-            if (ds.currentWeaponSlot >= 0 && ds.currentWeaponSlot < gp.player.inventory.size()) {
-                gp.player.currentWeapon = gp.player.inventory.get(ds.currentWeaponSlot);
-                if (gp.player.currentWeapon == null) { // Item tại slot đó là null sau khi load
-                    System.err.println("Load Warning: Loaded currentWeapon at slot " + ds.currentWeaponSlot + " is null. Equipping default.");
-                    
-                }
-            } else if (ds.currentWeaponSlot != -1) { // -1 có thể là "không trang bị"
-                System.err.println("Load Warning: Invalid currentWeaponSlot: " + ds.currentWeaponSlot + ". Equipping default.");
-               
-            } else {
-                
-            }
-
-
-            if (ds.currentShieldSlot >= 0 && ds.currentShieldSlot < gp.player.inventory.size()) {
-                gp.player.currentShield = gp.player.inventory.get(ds.currentShieldSlot);
-                 if (gp.player.currentShield == null) { // Item tại slot đó là null sau khi load
-                    System.err.println("Load Warning: Loaded currentShield at slot " + ds.currentShieldSlot + " is null. Equipping default.");
-                    
-                }
-            } else if (ds.currentShieldSlot != -1) { // -1 có thể là "không trang bị"
-                System.err.println("Load Warning: Invalid currentShieldSlot: " + ds.currentShieldSlot + ". Equipping default.");
-                
-            } else {
-               
-            }
-
+            gp.player.currentWeapon = gp.player.inventory.get(ds.currentWeaponSlot);
+            gp.player.currentShield = gp.player.inventory.get(ds.currentShieldSlot);
             gp.player.getAttack();
             gp.player.getDefense();
             gp.player.getAttackImage();
 
             for (int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
 
-            for (int i = 0; i < gp.obj[1].length; i++) { // Note: Image shows gp.obj[1].length
+                for (int i = 0; i < gp.obj[1].length; i++) { // Note: Image shows gp.obj[1].length
 
-                if (ds.mapObjectNames[mapNum][i].equals("NA")) {
-                    gp.obj[mapNum][i] = null;
-                }
-                else {
-                    gp.obj[mapNum][i] = gp.eGenerator.getObject(ds.mapObjectNames[mapNum][i]);
-                    gp.obj[mapNum][i].worldX = ds.mapObjectWorldX[mapNum][i];
-                    gp.obj[mapNum][i].worldY = ds.mapObjectWorldY[mapNum][i];
-                    if (ds.mapObjectLootNames[mapNum][i] != null) {
-                        gp.obj[mapNum][i].loot = gp.eGenerator.getObject(ds.mapObjectLootNames[mapNum][i]);
+                    if (ds.mapObjectNames[mapNum][i].equals("NA")) {
+                        gp.obj[mapNum][i] = null;
                     }
-                    gp.obj[mapNum][i].opened = ds.mapObjectOpened[mapNum][i];
-                    if (gp.obj[mapNum][i].opened == true) {
-                       gp.obj[mapNum][i].down1 = gp.obj[mapNum][i].image2;
+                    else {
+                        gp.obj[mapNum][i] = gp.eGenerator.getObject(ds.mapObjectNames[mapNum][i]);
+                        gp.obj[mapNum][i].worldX = ds.mapObjectWorldX[mapNum][i];
+                        gp.obj[mapNum][i].worldY = ds.mapObjectWorldY[mapNum][i];
+                        if (ds.mapObjectLootNames[mapNum][i] != null) {
+                            gp.obj[mapNum][i].setLoot(gp.eGenerator.getObject(ds.mapObjectLootNames[mapNum][i]));
+                        }
+                        gp.obj[mapNum][i].opened = ds.mapObjectOpened[mapNum][i];
+                        if (gp.obj[mapNum][i].opened == true) {
+                        gp.obj[mapNum][i].down1 = gp.obj[mapNum][i].image2;
+                        }
                     }
                 }
-            }
-        }    
-        ois.close();
+            }    
+            // ois.close();
 
         } 
         catch (Exception e) {

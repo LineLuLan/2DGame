@@ -131,6 +131,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void resetGame(boolean restart){
+        currentAre = outside;
+
         player.setDefaultPosition();
         player.restoreStatus();
         player.resetCounter();
@@ -371,8 +373,9 @@ public class GamePanel extends JPanel implements Runnable {
              g2.drawString("WorldY"+player.worldY,x,y); y += lineHeight;
              g2.drawString("Col"+(player.worldX -player.solidAreaDefaultX)/tileSize,x,y);y+=lineHeight;
              g2.drawString("Row"+(player.worldY -player.solidAreaDefaultY)/tileSize,x,y);y+=lineHeight;
+             g2.drawString("Draw Time"+passed,x,y);y+=lineHeight;
 
-             g2.drawString("Draw Time"+passed,x,y);
+             g2.drawString("God Mod: " + keyH.godModeOn, x, y);
 
         }
     }
