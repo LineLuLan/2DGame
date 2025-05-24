@@ -43,6 +43,7 @@ public class Entity {
     public boolean  offBalance = false;
     public Entity loot;
     public boolean opened = false;
+    public boolean inRage = false;
     
     // SUPER OBJECT
     public BufferedImage image, image2, image3;
@@ -51,6 +52,7 @@ public class Entity {
     
     public String dialogues[][] = new String[20][20];
     public Entity attacker;
+    public Entity linkedEntity;
     public int dialogueIndex = 0;
     public int dialogueSet = 0;
     
@@ -101,6 +103,7 @@ public class Entity {
     public boolean stackable = false;
     public int amount = 1;
     public int lightRadius;
+    public int durability = 100;
 
 
     //type 
@@ -115,6 +118,7 @@ public class Entity {
     public final int type_pickupOnly = 7;
     public final int type_obstacle = 8;
     public final int type_light = 9;
+    public final int type_pickaxe = 10;
 
  
     public Entity (GamePanel gp) {
@@ -292,22 +296,22 @@ public class Entity {
         
         switch(direction) {
             case "up":
-                if (gp.player.worldY < worldY && yDis < straight && xDis < horizontal) {
+                if (gp.player.getCenterY() < getCenterY() && yDis < straight && xDis < horizontal) {
                     targetInRange = true;
                 }
                 break;
             case "down":
-                if (gp.player.worldY > worldY && yDis < straight && xDis < horizontal) {
+                if (gp.player.getCenterY() > getCenterY() && yDis < straight && xDis < horizontal) {
                     targetInRange = true;
                 }
                 break;
             case "left":
-                if (gp.player.worldX < worldX && xDis < straight && yDis < horizontal) {
+                if (gp.player.getCenterX() < getCenterX() && xDis < straight && yDis < horizontal) {
                     targetInRange = true;
                 }
                 break;
             case "right":
-                if (gp.player.worldX > worldX && xDis < straight && yDis < horizontal) {
+                if (gp.player.getCenterX() > getCenterX() && xDis < straight && yDis < horizontal) {
                     targetInRange = true;
                 }
                 break;
@@ -356,10 +360,10 @@ public class Entity {
             }
         }
     }
-    public void getRandomDirection(){
+    public void getRandomDirection(int interval){
         actionLockCounter++;
             
-            if (actionLockCounter > 120) {
+            if (actionLockCounter > interval) {
                 Random random = new Random();
                 int i = random.nextInt(100) + 1;
     
@@ -379,6 +383,32 @@ public class Entity {
                 actionLockCounter = 0;
             }
     }
+
+    public void moveTowardPlayer(int interval){
+        actionLockCounter++;
+        if (actionLockCounter > interval) {
+
+            if (getXdistance(gp.player) > getYdistance(gp.player)){
+                if (gp.player.getCenterX() < getCenterX()){
+                    direction = "left";
+                }
+                else {
+                    direction = "right";
+                }
+            }
+            else if (getXdistance(gp.player) < getYdistance(gp.player)) {
+                if (gp.player.getCenterY() < getCenterY()){
+                    direction = "up";
+                }
+                else {
+                    direction = "down";
+                }
+            }
+
+            actionLockCounter = 0;
+        }
+    }
+
     public String getOppositeDirection(String direction) {
         String oppositeDirection = "";
     
@@ -504,9 +534,9 @@ public class Entity {
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
         
 
-        if (worldX > gp.player.worldX - gp.player.screenX - gp.tileSize
+        if (worldX > gp.player.worldX - gp.player.screenX - gp.tileSize*5
             && worldX < gp.player.screenX + gp.player.worldX + gp.tileSize
-            && worldY > gp.player.worldY - gp.player.screenY - gp.tileSize
+            && worldY > gp.player.worldY - gp.player.screenY - gp.tileSize*5
             && worldY < gp.player.worldY + gp.player.worldY + gp.tileSize) {
         
         int tempScreenX = screenX;
@@ -519,7 +549,7 @@ public class Entity {
                     if (spriteNum == 2) { image = up2; }
                 }
                 if (attacking == true) {
-                    tempScreenY = screenY - gp.tileSize;
+                    tempScreenY = screenY - up1.getHeight();
                     if (spriteNum == 1) { image = attackUp1; }
                     if (spriteNum == 2) { image = attackUp2; }
                 }
@@ -540,7 +570,7 @@ public class Entity {
                     if (spriteNum == 2) { image = left2; }
                 }
                 if (attacking == true) {
-                    tempScreenX =  screenX - gp.tileSize;
+                    tempScreenX =  screenX - left1.getWidth();
                     if (spriteNum == 1) { image = attackLeft1; }
                     if (spriteNum == 2) { image = attackLeft2; }
                 }
@@ -613,14 +643,26 @@ public class Entity {
     public void changeAlpha(Graphics2D g2, float alpha) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
+
+    public int getCenterX(){
+        int centerX = worldX + left1.getWidth()/2;
+        return centerX;
+    }
+
+    public int getCenterY(){
+        int centerY = worldY + up1.getHeight()/2;
+        return centerY;
+    }
+
     public int getXdistance(Entity target){
-        int xDistance = Math.abs(worldX - target.worldX);
+        int xDistance = Math.abs(getCenterX() - target.worldX);
         return xDistance;
     }
     public int getYdistance(Entity target){
-        int yDistance = Math.abs(worldY - target.worldY);
+        int yDistance = Math.abs(getCenterY() - target.worldY);
         return yDistance;
     }
+
     public int getTileDistance(Entity target){
         int tileDistance = (getXdistance(target) + getYdistance(target))/gp.tileSize;
         return tileDistance;
@@ -649,7 +691,9 @@ public class Entity {
 
     public void setLoot(Entity loot){}
     public void setAction(){}
-
+    public void move(String direction){
+        
+    }
     public void damageReaction(){}
     public void speak(){}
     public void facePlayer() {

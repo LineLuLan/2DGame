@@ -8,6 +8,8 @@ public class KeyHandler implements KeyListener{
     public boolean upPressed, downPressed, rightPressed, leftPressed, enteredPressed, shotKeyPressed,spacePressed;
 
     public boolean showDebugText = false;
+    public boolean godModeOn = false;
+
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -210,6 +212,13 @@ public class KeyHandler implements KeyListener{
             switch(gp.currentmap){
                 case 0 : gp.tileM.loadMap("./res/maps/worldV3.txt",0);break;
                 case 1 : gp.tileM.loadMap("./res/maps/interior01.txt",0);break;
+            }
+        }
+        if (code == KeyEvent.VK_G){
+            if (godModeOn == false){
+                godModeOn = true;
+            } else if (godModeOn == true){
+                godModeOn = false;
             }
         }
 

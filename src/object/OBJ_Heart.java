@@ -4,12 +4,13 @@ import entity.Entity;
 import main.GamePanel;
 
 public class OBJ_Heart extends Entity {
+    public static final String objName = "Heart";
     GamePanel gp;
     public OBJ_Heart(GamePanel gp) {
         super(gp);
         this.gp = gp;
         
-        name = "Heart";
+        name = objName;
         type = type_pickupOnly;
         value = 2;
         

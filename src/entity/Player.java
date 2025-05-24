@@ -61,7 +61,7 @@ public class Player extends Entity {
         maxMana = 4;
         mana = maxMana;
         ammo = 10;
-        strength = 1; //The more strength she has, the more damage he gives
+        strength = 10; //The more strength she has, the more damage he gives
         dexterity = 1; //The more dexterity she has, the less damage she receives
         exp = 0;
         nextLevelExp = 5;
@@ -82,6 +82,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultPosition(){
+        gp.currentmap = 0;
+
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         direction = "down";
@@ -103,6 +105,7 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Lantern(gp));
         
@@ -180,6 +183,16 @@ public class Player extends Entity {
             attackLeft2 = setUp("player/Line_axe_left2" , gp.tileSize*2, gp.tileSize);
             attackRight1 = setUp("player/Line_axe_right1", gp.tileSize*2, gp.tileSize);
             attackRight2 = setUp("player/Line_axe_right2", gp.tileSize*2, gp.tileSize);
+        }
+        if (currentWeapon.type == type_pickaxe){
+            attackUp1 = setUp("player/Line_pick_up1", gp.tileSize, gp.tileSize*2);
+            attackUp2 = setUp("player/Line_pick_up2", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setUp("player/Line_pick_down1", gp.tileSize, gp.tileSize*2);
+            attackDown2 = setUp("player/Line_pick_down2", gp.tileSize, gp.tileSize*2);
+            attackLeft1 = setUp("player/Line_pick_left1", gp.tileSize*2, gp.tileSize);
+            attackLeft2 = setUp("player/Line_pick_left2" , gp.tileSize*2, gp.tileSize);
+            attackRight1 = setUp("player/Line_pick_right1", gp.tileSize*2, gp.tileSize);
+            attackRight2 = setUp("player/Line_pick_right2", gp.tileSize*2, gp.tileSize);
         }
     }
     public void getGuardImage(){
@@ -265,6 +278,9 @@ public class Player extends Entity {
                     gp.playSE(7);
                     attacking = true;
                     spriteCounter = 0;
+
+                    // DECREASE DURABILITY
+                    currentWeapon.durability --;
                 }
 
                 attackCanceled = false;
@@ -331,12 +347,14 @@ public class Player extends Entity {
         if (mana > maxMana) {
             mana = maxMana;
         }  
-        if (life <= 0){
-            gp.gameState = gp.gamveOverState;
-            gp.ui.commandNum = -1;
-            gp.stopMusic();
-            gp.playSE(12);
-        }
+        if (keyH.godModeOn == false){
+            if (life <= 0){
+                gp.gameState = gp.gamveOverState;
+                gp.ui.commandNum = -1;
+                gp.stopMusic();
+                gp.playSE(12);
+            }
+        } 
     }
     
     
@@ -373,13 +391,17 @@ public class Player extends Entity {
     }
 
     public void interactNPC(int i) {
-        if (gp.keyH.enteredPressed == true) {
-            if (i != 999) {
+        if (i != 999) {
+            if (gp.keyH.enteredPressed == true){
+
                 attackCanceled = true;
                 gp.npc[gp.currentmap][i].speak();
             }
-//            gp.keyH.enteredPressed = false;
+            gp.npc[gp.currentmap][i].move(direction);
+            //            gp.keyH.enteredPressed = false;
         }
+
+        
     }
 
     public void contactMonster(int i) {
@@ -450,7 +472,6 @@ public class Player extends Entity {
 
                 if (gp.iTile[gp.currentmap][i].life <= 0) {
                     gp.iTile[gp.currentmap][i] = gp.iTile[gp.currentmap][i].getDestroyedForm();
-                    
                 }
                 
 
@@ -478,7 +499,9 @@ public class Player extends Entity {
 
             gp.playSE(8);
             gp.gameState = gp.dialogueState;
-
+//            dialogues[0][0] = "You are level" + level + " now!/n"
+//            + "You feel stronger!";
+            setDialogue();;
             startDialogue(this, 0);
         }
     }
@@ -488,7 +511,7 @@ public class Player extends Entity {
         if(itemIndex < inventory.size()){
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.type == type_sword || selectedItem.type == type_axe ){
+            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe){
                 currentWeapon = selectedItem; 
                 attack = getAttack();
                 getAttackImage();
@@ -533,10 +556,10 @@ public class Player extends Entity {
     }
     public boolean canObtainItem(Entity item){
         boolean canObtain = false;
-
+        Entity newItem = gp.eGenerator.getObject((item.name));
         //check if stackable
-        if(item.stackable == true){
-            int index = searchItemInventory(item.name);
+        if(newItem.stackable == true){
+            int index = searchItemInventory(newItem.name);
 
             if (index != 999){
                 inventory.get(index).amount ++;
@@ -544,14 +567,14 @@ public class Player extends Entity {
             }
             else { // NEW ITEM SO NEED TO CHECK VACANCY
                 if (inventory.size() != maxInventorySize){
-                    inventory.add(item);
+                    inventory.add(newItem);
                     canObtain = true;
                 }
             }
         }
         else{ // NOT STACKABLE SO CHECK VANCANCY
             if (inventory.size() != maxInventorySize){
-                inventory.add(item);
+                inventory.add(newItem);
                 canObtain = true;
             }
         }
