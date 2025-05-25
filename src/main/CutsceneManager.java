@@ -26,7 +26,13 @@ public class CutsceneManager {
 
     public CutsceneManager(GamePanel gp) {
         this.gp = gp;
-        endCredit = "Thank you for playing!";
+        endCredit = "Thank you for playing!\n\n"+
+                    "Contributers:\n"+
+                    "Leader: Tran Nam Anh _ ITDSIU23030 (Line)\n"+
+                    "Member: Ngo Thi Anh Duong _ ITDSIU23005\n"+
+                    "Member: Nguyen Duc Hai _ ITDSIU23006\n"+
+                    "Member: Dang Minh Phat _ ITDSIU23017\n\n\n\n\n\n\n\n"+
+                    "To be continued...";
     }
 
     public void draw(Graphics2D g2) {
@@ -194,8 +200,12 @@ public class CutsceneManager {
             y--;
             drawString(1f, 38f, y, endCredit, 40);
 
-            if (y == -10){
-                gp.gameState = gp.playState;
+            if (y == -700){
+                gp.ui.titleScreenState = 0;
+                gp.gameState = gp.titleState;
+                gp.ui.titleScreenState = 0;
+                gp.resetGame(true);
+                gp.playSE(0);
             }
         }
 

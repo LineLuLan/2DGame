@@ -78,7 +78,7 @@ public class MON_SkeletonLord extends Entity {
     public void setDialogue(){
         dialogues[0][0] = "No one can steal my treasures";
         dialogues[0][1] = "You will die here";
-        dialogues[0][2] = "WELCOME THE HELL BITHCH! (J4f sửa sau)";
+        dialogues[0][2] = "WELCOME THE HELL, INSECTS!";
         }
     public void getAttackImage(){
         int i = 5;

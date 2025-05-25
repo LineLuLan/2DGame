@@ -7,6 +7,7 @@ import entity.NPC_OldMan;
 import monster.MON_Bat;
 import monster.MON_GreenSlime;
 import monster.MON_Orc;
+import monster.MON_RedSlime;
 import monster.MON_SkeletonLord;
 import object.OBJ_Axe;
 import object.OBJ_Blue_Heart;
@@ -17,6 +18,7 @@ import object.OBJ_Key;
 import object.OBJ_Lantern;
 import object.OBJ_Pickaxe;
 import object.OBJ_Potion_Red;
+import object.OBJ_Shield_Blue;
 import object.OBJ_Tent;
 import tile_interactive.IT_DestructibleWall;
 import tile_interactive.IT_DryTree;
@@ -45,10 +47,7 @@ public class AssetSetter {
     //    gp.obj[mapNum][i].worldY = gp.tileSize*21;
     //    i++;
 
-        gp.obj[mapNum][i] = new OBJ_Lantern(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*18;
-        gp.obj[mapNum][i].worldY = gp.tileSize*20;
-        i++;
+
         gp.obj[mapNum][i] = new OBJ_Axe(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*33;
         gp.obj[mapNum][i].worldY = gp.tileSize*21;
@@ -66,10 +65,27 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*30;
         gp.obj[mapNum][i].worldY = gp.tileSize*28;
         i++;
-        gp.obj[mapNum][i] = new OBJ_Tent(gp);
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Lantern(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*20;
+        gp.obj[mapNum][i].worldY = gp.tileSize*7;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Axe(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*22;
+        gp.obj[mapNum][i].worldY = gp.tileSize*40;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Shield_Blue(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*39;
+        gp.obj[mapNum][i].worldY = gp.tileSize*8;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Tent(gp));
         gp.obj[mapNum][i].worldX = gp.tileSize*19;
         gp.obj[mapNum][i].worldY = gp.tileSize*20;
         i++;
+        
 //        gp.obj[mapNum][i] = new OBJ_Shield_Blue(gp);
 //        gp.obj[mapNum][i].worldX = gp.tileSize*35;
 //        gp.obj[mapNum][i].worldY = gp.tileSize*21;
@@ -106,6 +122,7 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*18;
         gp.obj[mapNum][i].worldY = gp.tileSize*23;
         i++;
+        
 
         mapNum = 3;
         i = 0;
@@ -183,6 +200,23 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldX = gp.tileSize * 12;
         gp.monster[mapNum][i].worldY = gp.tileSize * 33;
         i++;
+    
+        gp.monster[mapNum][i] = new MON_RedSlime(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 39;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 10;
+        i++;
+        gp.monster[mapNum][i] = new MON_RedSlime(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 35;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 9;
+        i++;
+        gp.monster[mapNum][i] = new MON_RedSlime(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 36;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 11;
+        i++;
+        gp.monster[mapNum][i] = new MON_RedSlime(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 37;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 7;
+        i++;
 
         mapNum = 2;
         i = 0;
@@ -205,6 +239,10 @@ public class AssetSetter {
         gp.monster[mapNum][i] = new MON_Bat(gp);
         gp.monster[mapNum][i].worldX = gp.tileSize*10;
         gp.monster[mapNum][i].worldY = gp.tileSize*19;
+        i++;
+        gp.monster[mapNum][i] = new MON_Orc(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 19;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 10;
         i++;
 
         mapNum = 3;

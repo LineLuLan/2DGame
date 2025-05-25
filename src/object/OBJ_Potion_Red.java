@@ -17,7 +17,7 @@ public class OBJ_Potion_Red extends Entity {
         down1 = setUp("objects/potion_red", gp.tileSize, gp.tileSize);
         collision = true;
         description = "[" + name+ "]\nRestore Hp by " + value + "."; 
-        price = 25;
+        price = 2;
         stackable = true;
         setDialogue();
     }
