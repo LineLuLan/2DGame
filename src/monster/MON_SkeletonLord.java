@@ -27,7 +27,6 @@ public class MON_SkeletonLord extends Entity {
         life = maxLife;
         attack = 10;
         defense = 2;
-        exp = 50;
         knockBackPower = 5;
         sleep = true;
 

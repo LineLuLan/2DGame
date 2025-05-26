@@ -263,7 +263,7 @@ public class UI {
             //TITLE NAME
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
             
-            String text = "2D Game Adventure";
+            String text = "Line Adventure";
             int x = getXforCenteredText(text);
             int y = gp.tileSize * 3;
 

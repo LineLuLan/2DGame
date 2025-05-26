@@ -131,6 +131,7 @@ public class Entity {
     }
     public int getScreenX(){
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
+        
         return screenX;
     }
     public int getScreenY(){

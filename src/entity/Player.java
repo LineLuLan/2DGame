@@ -47,7 +47,8 @@ public class Player extends Entity {
     public void setDefaultValues() {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
-
+        
+        
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -103,6 +104,7 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
+        
         
 
     }
@@ -487,8 +489,8 @@ public class Player extends Entity {
             maxLife += 2;
             maxMana ++;
             life +=2;
-            strength +=2;
-            dexterity +=2;
+            strength ++;
+            dexterity ++;
             projectile.attack +=1;
             attack = getAttack();
             defense = getDefense();
