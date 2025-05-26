@@ -47,6 +47,7 @@ public class EntityGenerator {
             case OBJ_Sword_Normal.objName: obj = new OBJ_Sword_Normal(gp); break;
             case OBJ_Tent.objName: obj = new OBJ_Tent(gp); break;
             
+            
             default:
                 System.err.println("getObject Warning: Unknown item name '" + itemName + "'");
                 // obj vẫn là null

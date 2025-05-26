@@ -1,5 +1,6 @@
 package main;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class App {
@@ -8,7 +9,8 @@ public class App {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("2D Adventure");
+        window.setTitle("Line Adventure");
+        new App().setIcon();
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
@@ -30,5 +32,9 @@ public class App {
         
         gamePanel.setUpGame();
         gamePanel.startGameThread();
+    }
+    public void setIcon(){
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("player/Line_down1.png"));
+        window.setIconImage(icon.getImage());
     }
 }

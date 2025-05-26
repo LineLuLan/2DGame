@@ -7,8 +7,6 @@ import java.awt.image.BufferedImage;
 import main.GamePanel;
 import main.KeyHandler;
 import object.OBJ_Fireball;
-import object.OBJ_Key;
-import object.OBJ_Lantern;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
@@ -49,7 +47,8 @@ public class Player extends Entity {
     public void setDefaultValues() {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
-  
+        
+        
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -61,11 +60,11 @@ public class Player extends Entity {
         maxMana = 4;
         mana = maxMana;
         ammo = 10;
-        strength = 10; //The more strength she has, the more damage he gives
+        strength = 1; //The more strength she has, the more damage he gives
         dexterity = 1; //The more dexterity she has, the less damage she receives
         exp = 0;
         nextLevelExp = 5;
-        coin = 500;
+        coin = 10;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
         currentLight = null;
@@ -105,9 +104,7 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Lantern(gp));
+        
         
 
     }
@@ -490,6 +487,7 @@ public class Player extends Entity {
             level ++;
             nextLevelExp = nextLevelExp *2;
             maxLife += 2;
+            maxMana ++;
             life +=2;
             strength ++;
             dexterity ++;
@@ -646,9 +644,9 @@ public class Player extends Entity {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
 
-
-
-        g2.drawImage(image, tempScreenX, tempScreenY, null);
+        if(drawing == true){
+            g2.drawImage(image, tempScreenX, tempScreenY, null);
+        }
 
         // RESET ALPHA
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
