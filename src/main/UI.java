@@ -1087,7 +1087,7 @@ public class UI {
             g2.drawImage(coin, x+10, y+8, 32,32,null);
 
             int price = gp.player.inventory.get(itemIndex).price;
-            String text = "" + price;
+            String text = "" + (price - 1);
             x = getXForAlignToRightText(text, gp.tileSize*18-20);
             g2.drawString(text,x,y+34);
 
@@ -1107,7 +1107,7 @@ public class UI {
                     else{
                         gp.player.inventory.remove(itemIndex);
                     }
-                    gp.player.coin += price;
+                    gp.player.coin += price - 1;
                 }
             }
 
