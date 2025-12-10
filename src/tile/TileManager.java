@@ -5,94 +5,141 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.Buffer;
 import javax.imageio.ImageIO;
 import main.GamePanel;
 import main.UtilityTool;
+import java.util.ArrayList;
+import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
     public Tile[] tile;
     public int mapTileNum[][][];
     boolean drawPath = true;
+    ArrayList<String> fileNames = new ArrayList<>();
+    ArrayList<String> collisionStatus = new ArrayList<>();
 
     public TileManager (GamePanel gp){
         this.gp = gp;
 
-        tile = new Tile[50];
-        mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
+        InputStream is = getClass().getResourceAsStream("/maps/Tile_data.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is)); 
         
-
+        String line; 
+        try {
+            while ((line = br.readLine()) != null) {
+    
+                fileNames.add(line);
+                collisionStatus.add(br.readLine());
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tile = new Tile[fileNames.size()];
         getTileImage();
-        loadMap("./res/maps/interior01.txt",1);
-        loadMap("./res/maps/worldV3.txt",0);
+        is = getClass().getResourceAsStream("/maps/worldmap.txt");
+        br = new BufferedReader(new InputStreamReader(is));
+        try {
+            String line2 = br.readLine();
+            String maxTile[] = line2.split(" ");
+
+            gp.maxWorldCol = maxTile.length;
+            gp.maxWorldRow = maxTile.length;
+            mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
+            br.close();
+        } catch (IOException e){
+            System.out.println("Exception!");
+        }
+        
+        
+        loadMap("./res/maps/indoor01.txt",1);
+        loadMap("./res/maps/worldmap.txt",0);
         loadMap("./res/maps/dungeon01.txt",2);
         loadMap("./res/maps/dungeon02.txt",3);
+        loadMap("./res/maps/Snow_map.txt",4);
     }
 
     public void getTileImage(){
 
-        //PLACE HOLDER - MEAN USELESS IN DESIGN MAP
-        setUp(0, "grass00", false);
-        setUp(1, "grass00", false);
-        setUp(2, "grass00", false);
-        setUp(3, "grass00", false);
-        setUp(4, "grass00", false);
-        setUp(5, "grass00", false);
-        setUp(6, "grass00", false);
-        setUp(7, "grass00", false);
-        setUp(8, "grass00", false);
-        setUp(9, "grass00", false);
-        //PLACE HOLDER ----------------------------
+        for (int i = 0; i < fileNames.size(); i ++){
+            String fileName;
+            boolean collision;
 
-        //GRASS
-        setUp(10, "grass00", false);
-        setUp(11, "grass01", false);
+            fileName = fileNames.get(i);
 
-        //WATER
-        setUp(12, "water00", true);
-        setUp(13, "water01", true);
-        setUp(14, "water02", true);
-        setUp(15, "water03", true);
-        setUp(16, "water04", true);
-        setUp(17, "water05", true);
-        setUp(18, "water06", true);
-        setUp(19, "water07", true);
-        setUp(20, "water08", true);
-        setUp(21, "water09", true);
-        setUp(22, "water10", true);
-        setUp(23, "water11", true);
-        setUp(24, "water12", false);
-        setUp(25, "water13", false);
+            if (collisionStatus.get(i).equals("true")){
+                collision = true;
+            } else {
+                collision = false;
+            }
+
+            setUp(i, fileName, collision);
+        }
+        // //PLACE HOLDER - MEAN USELESS IN DESIGN MAP
+        // setUp(0, "grass00", false);
+        // setUp(1, "grass00", false);
+        // setUp(2, "grass00", false);
+        // setUp(3, "grass00", false);
+        // setUp(4, "grass00", false);
+        // setUp(5, "grass00", false);
+        // setUp(6, "grass00", false);
+        // setUp(7, "grass00", false);
+        // setUp(8, "grass00", false);
+        // setUp(9, "grass00", false);
+        // //PLACE HOLDER ----------------------------
+
+        // //GRASS
+        // setUp(10, "grass00", false);
+        // setUp(11, "grass01", false);
+
+        // //WATER
+        // setUp(12, "water00", true);
+        // setUp(13, "water01", true);
+        // setUp(14, "water02", true);
+        // setUp(15, "water03", true);
+        // setUp(16, "water04", true);
+        // setUp(17, "water05", true);
+        // setUp(18, "water06", true);
+        // setUp(19, "water07", true);
+        // setUp(20, "water08", true);
+        // setUp(21, "water09", true);
+        // setUp(22, "water10", true);
+        // setUp(23, "water11", true);
+        // setUp(24, "water12", false);
+        // setUp(25, "water13", false);
         
-        //ROAD
-        setUp(26, "road00", false);
-        setUp(27, "road01", false);
-        setUp(28, "road02", false);
-        setUp(29, "road03", false);
-        setUp(30, "road04", false);
-        setUp(31, "road05", false);
-        setUp(32, "road06", false);
-        setUp(33, "road07", false);
-        setUp(34, "road08", false);
-        setUp(35, "road09", false);
-        setUp(36, "road10", false);
-        setUp(37, "road11", false);
-        setUp(38, "road12", false);
+        // //ROAD
+        // setUp(26, "road00", false);
+        // setUp(27, "road01", false);
+        // setUp(28, "road02", false);
+        // setUp(29, "road03", false);
+        // setUp(30, "road04", false);
+        // setUp(31, "road05", false);
+        // setUp(32, "road06", false);
+        // setUp(33, "road07", false);
+        // setUp(34, "road08", false);
+        // setUp(35, "road09", false);
+        // setUp(36, "road10", false);
+        // setUp(37, "road11", false);
+        // setUp(38, "road12", false);
 
 
-        setUp(39, "earth", false);
-        setUp(40, "wall", true);
-        setUp(41, "tree", true);
-        setUp(42, "hut", true);
-        setUp(43, "floor01", true);
-        setUp(44, "table01", true);
+        // setUp(39, "earth", false);
+        // setUp(40, "wall", true);
+        // setUp(41, "tree", true);
+        // setUp(42, "hut", true);
+        // setUp(43, "floor01", true);
+        // setUp(44, "table01", true);
 
-        setUp(42, "hut", false);
-        setUp(43, "floor01", false);
-        setUp(44, "table01", true);
-        setUp(45, "stair1", false);
-        setUp(46, "stair2", false);
-        setUp(47, "dark", true);
+        // setUp(42, "hut", false);
+        // setUp(43, "floor01", false);
+        // setUp(44, "table01", true);
+        // setUp(45, "stair1", false);
+        // setUp(46, "stair2", false);
+        // setUp(47, "dark", true);
         
 
     }
@@ -102,7 +149,7 @@ public class TileManager {
 
         try {
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(new File("./res/tile/" + imageName + ".png"));
+            tile[index].image = ImageIO.read(new File("./res/tile/" + imageName ));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
             tile[index].collision = collision;
         } catch (IOException e) {

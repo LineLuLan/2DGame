@@ -15,7 +15,7 @@ public class OBJ_Sword_Normal extends Entity {
         attackArea.width = 36;
         attackArea.height = 36;
         description = "[" + name+ "]\nMade by wood."; 
-        price = 2;
+        price = 5;
         knockBackPower = 5;
         motion1_duration = 5;
         motion2_duration = 25;

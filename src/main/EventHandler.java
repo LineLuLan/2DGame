@@ -65,20 +65,26 @@ public class EventHandler {
             if (hit(0,23, 12, "any") == true) {
                 healingPool(gp.dialogueState);
             }
-            else if (hit(0,10,39,"any") == true){
+            else if (hit(4,29,36,"any") == true){
                 teleport(1,12,13,gp.indoor);
             }
+            else if (hit(0,35,43,"any") == true){
+                teleport(4,13,13,gp.outside);
+            }
+            else if (hit(4,13,13,"any") == true){
+                teleport(0,35,43,gp.outside);
+            }
+            else if (hit(4,16,32,"any") == true){
+                teleport(2,9,41,gp.dungeon);
+            }
             else if (hit(1,12,13,"any") == true){
-                teleport(0,10,39,gp.outside);
+                teleport(4,29,36,gp.outside);
             }
             else if (hit(1,12,9 ,"up")==true){
                 speak(gp.npc[1][0]);
             }
-            else if (hit(0,12,10,"any") == true){
-                teleport(2,9,41,gp.dungeon);
-            }
             else if (hit(2,9,41,"any") == true){
-                teleport(0,12,10,gp.outside);
+                teleport(4,16,32,gp.outside);
             }
             else if (hit(2,8,7,"any") == true){
                 teleport(3,26,41,gp.dungeon);

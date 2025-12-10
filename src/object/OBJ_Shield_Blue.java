@@ -13,6 +13,6 @@ public class OBJ_Shield_Blue extends Entity {
         down1 = setUp("objects/shield_blue", gp.tileSize, gp.tileSize);
         defenseValue  = 3;
         description = "[" + name+ "]\nMade by iron."; 
-        price = 5; 
+        price = 30; 
     }
 }
