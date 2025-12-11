@@ -71,7 +71,7 @@ public class EventHandler {
             else if (hit(0,35,43,"any") == true){
                 teleport(4,13,13,gp.outside);
             }
-            else if (hit(4,13,13,"any") == true){
+            else if (hit(4,13,12,"any") == true){
                 teleport(0,35,43,gp.outside);
             }
             else if (hit(4,16,32,"any") == true){

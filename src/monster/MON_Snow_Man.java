@@ -22,7 +22,7 @@ public class MON_Snow_Man extends Entity{
         maxLife = 35;
         life = maxLife;
         attack = 4;
-        defense = 8;
+        defense = 4;
         exp = 5;
         projectile = new OBJ_Fireball(gp);
 

@@ -22,7 +22,7 @@ public class MON_IceSlime extends Entity{
         maxLife = 30;
         life = maxLife;
         attack = 5;
-        defense = 5;
+        defense = 3;
         exp = 7;
         projectile = new OBJ_IceRock(gp);
 
