@@ -29,7 +29,6 @@ public class CutsceneManager {
         endCredit = "Thank you for playing!\n\n"+
                     "Contributers:\n"+
                     "Leader: Tran Nam Anh _ ITDSIU23030 (Line)\n"+
-                    "Member: Ngo Thi Anh Duong _ ITDSIU23005\n"+
                     "Member: Nguyen Duc Hai _ ITDSIU23006\n"+
                     "Member: Dang Minh Phat _ ITDSIU23017\n\n\n\n\n\n\n\n"+
                     "To be continued...";

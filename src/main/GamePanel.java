@@ -93,8 +93,8 @@ public class GamePanel extends JPanel implements Runnable {
     Sound se = new Sound();
 
     //World Setting
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
+    public  int maxWorldCol ;
+    public  int maxWorldRow ;
     public int currentmap = 0;
 
     // FOR FULL SCREEN
